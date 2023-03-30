@@ -10,6 +10,18 @@ public class SqlExecutor extends AbstractSqlExecutor{
 
     /**
      * 对数据库进行更新操作，并返回一个被修改的行数
+     * @param sql sql更新语句
+     * @param params 访问参数
+     * @return 被影响的行数
+     */
+    public int update(final String sql,final Object... params){
+        Connection conn = this.prepareConnection();
+        //调用自身的 .update() 方法
+        return this.update(conn,true,sql,params);
+    }
+
+    /**
+     * 对数据库进行更新操作，并返回一个被修改的行数
      * @param conn 数据库连接
      * @param sql sql更新语句
      * @param params 访问参数
