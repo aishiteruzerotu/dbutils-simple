@@ -6,7 +6,7 @@ import java.sql.*;
  * 该类用于数据库操作
  * 是数据库操作工具类
  */
-public class SqlExecutor {
+public class SqlExecutor extends AbstractSqlExecutor{
 
     /**
      * 对数据库进行更新操作，并返回一个被修改的行数

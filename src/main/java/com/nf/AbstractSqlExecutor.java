@@ -2,7 +2,10 @@ package com.nf;
 
 import javax.sql.DataSource;
 
-public class AbstractSqlExecutor {
+/**
+ *
+ */
+public abstract class AbstractSqlExecutor {
     protected DataSource ds ;
 
     public AbstractSqlExecutor() {
@@ -11,4 +14,5 @@ public class AbstractSqlExecutor {
     public AbstractSqlExecutor(DataSource ds) {
         this.ds = ds;
     }
+    
 }

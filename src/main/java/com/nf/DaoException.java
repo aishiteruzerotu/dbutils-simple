@@ -5,6 +5,9 @@ package com.nf;
  * RuntimeException 运行时异常
  */
 public class DaoException extends RuntimeException{
+    /**
+     * 空异常
+     */
     public DaoException() {
         //空异常
     }
