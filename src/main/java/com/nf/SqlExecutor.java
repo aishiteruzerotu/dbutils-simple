@@ -1,5 +1,6 @@
 package com.nf;
 
+import javax.sql.DataSource;
 import java.sql.*;
 
 /**
@@ -7,6 +8,21 @@ import java.sql.*;
  * 是数据库操作工具类
  */
 public class SqlExecutor extends AbstractSqlExecutor{
+
+    /**
+     * 默认构造器
+     */
+    public SqlExecutor() {
+        super();
+    }
+
+    /**
+     * 创建对象
+     * @param ds DataSource对象
+     */
+    public SqlExecutor(DataSource ds) {
+        super(ds);
+    }
 
     /**
      * 对数据库进行更新操作，并返回一个被修改的行数
