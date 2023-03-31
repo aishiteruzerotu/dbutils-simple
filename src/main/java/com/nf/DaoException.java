@@ -1,7 +1,7 @@
 package com.nf;
 
 /**
- * 异常类
+ * 数据库操作异常类
  * RuntimeException 运行时异常
  */
 public class DaoException extends RuntimeException{

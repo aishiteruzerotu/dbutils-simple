@@ -1,7 +1,8 @@
 package com.nf;
 
 /**
- *
+ * 反射异常类
+ * RuntimeException 运行时异常
  */
 public class ReflexException extends RuntimeException{
     /**
