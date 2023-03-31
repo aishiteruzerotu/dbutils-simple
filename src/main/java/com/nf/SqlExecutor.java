@@ -31,6 +31,7 @@ public class SqlExecutor extends AbstractSqlExecutor{
      * @return 被影响的行数
      */
     public int update(final String sql,final Object... params){
+        //声明一个数据库连接 Connection 对象，调用自身方法为其赋值
         Connection conn = this.prepareConnection();
         //调用自身的 .update() 方法
         return this.update(conn,true,sql,params);
@@ -84,6 +85,7 @@ public class SqlExecutor extends AbstractSqlExecutor{
             //使用statement执行器的.executeUpdate() 更新方法，并将返回值 赋值给 rows
             rows = statement.executeUpdate();
         }catch (SQLException e){
+            //抛出更新失败异常
             throw new DaoException("update be defeated...",e);
         }finally {
             //关闭执行器 statement
@@ -99,6 +101,79 @@ public class SqlExecutor extends AbstractSqlExecutor{
     }
 
     /**
+     * 通过对象可以自动插入一行对应的数据
+     * @param t 对象
+     * @param <T> 可以接收泛型对象
+     * @return 一个被修改的行数
+     */
+    public <T> int insertObject(T t){
+        //获取连接
+        Connection conn  = this.prepareConnection();
+        //获取插入语句
+        String sql = DbUtils.generateInsert(t);
+        //调用自身 insertObject 方法
+        return this.insertObject(conn,false,sql,t);
+    }
+
+    /**
+     * 通过对象可以自动插入一行对应的数据
+     * @param sql sql语句
+     * @param t 对象
+     * @param <T> 可以接收泛型对象
+     * @return 一个被修改的行数
+     */
+    public <T> int insertObject(final String sql,T t){
+        //获取连接
+        Connection conn  = this.prepareConnection();
+        //调用自身 insertObject 方法
+        return this.insertObject(conn,false,sql,t);
+    }
+
+    /**
+     * 通过对象可以自动插入一行对应的数据
+     * @param conn 数据库连接
+     * @param t 对象
+     * @param <T> 可以接收泛型对象
+     * @return 一个被修改的行数
+     */
+    public <T> int insertObject(Connection conn,T t){
+        //获取插入语句
+        String sql = DbUtils.generateInsert(t);
+        //调用自身 insertObject 方法
+        return this.insertObject(conn,true,sql,t);
+    }
+
+    /**
+     * 通过对象可以自动插入一行对应的数据
+     * @param conn 数据库连接
+     * @param sql sql语句
+     * @param t 对象
+     * @param <T> 可以接收泛型对象
+     * @return 一个被修改的行数
+     */
+    public <T> int insertObject(Connection conn,final String sql,T t){
+        //调用自身 insertObject 方法
+        return this.insertObject(conn,true,sql,t);
+    }
+
+    /**
+     * 通过对象可以自动插入一行对应的数据
+     * @param conn 数据库连接
+     * @param closeConn 是否关闭数据库连接
+     * @param sql sql语句
+     * @param t 对象
+     * @param <T> 可以接收泛型对象
+     * @return 一个被修改的行数
+     */
+    private <T> int insertObject(final Connection conn,final boolean closeConn,final String sql,T t){
+        //获取 Object 数组，用于数据库连接参数
+        Object[] objects = DbUtils.getObjects(t);
+        //调用自身的 .update() 方法 , 进行更新操作
+        return this.update(conn,closeConn,sql,objects);
+    }
+
+
+    /**
      * 给statement赋值，填充访问参数
      * @param statement 执行器
      * @param params 访问参数
@@ -106,23 +181,8 @@ public class SqlExecutor extends AbstractSqlExecutor{
      * @throws SQLException
      */
     private PreparedStatement fillStatement(PreparedStatement statement, Object... params) throws SQLException {
-        //判断params是否为空，如果为空则直接返回PreparedStatement对象
-        if (params==null||params.length==0){
-            return statement;
-        }
-        //循环给statement赋访问参数
-        for (int i = 0; i < params.length; i++) {
-            //判断当前参数 params[i] 是否为空
-            if (params[i]!=null){
-                //不为空则正常赋值
-                statement.setObject(i+1,params[i]);
-            }else {
-                //为空则给该值赋空值
-                statement.setNull(i+1, Types.VARCHAR);
-            }
-        }
-        //返回PreparedStatement对象
-        return statement;
+        //调用工具类的 fillStatement 方法 给statement赋值
+        return DbUtils.fillStatement(statement,params);
     }
 
 }
