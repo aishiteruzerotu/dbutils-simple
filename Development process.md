@@ -6,8 +6,9 @@
 
 主要完成两个方法
 
-		1. int update	增删改操作  返回被修改的行
-  		2. T query		 查询操作	 返回一个泛型对象 T
+1. int update	增删改操作  返回被修改的行
+2. T query		 查询操作	 返回一个泛型对象 T
+3. int insertObject 通过对象增加一行对应的数据 返回插入的行数
 
 
 
@@ -20,3 +21,22 @@
 ​	可以让用户能扩展获取连接的功能
 
 ##	3.2添加父类 AbstractSqlExecutor
+
+因为getDataSource，prepareConnection这2个方法，源码中都说要留着给子类重写用，基于这个逻辑，就决定创建父类出来
+
+这样，框架的用户在不满意我们框架的功能的时候，他可以选择重写SqlExecutor或者重写AbstractSqlExecutor
+
+##	4、实现接口ResultSetHandler
+
+​	此接口方法用于处理数据库查询结果集
+
+##	4.1ArrayHandler
+
+​	该方法返回一个 Object数组
+
+
+
+
+
+
+
