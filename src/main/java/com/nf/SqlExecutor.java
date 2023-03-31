@@ -97,9 +97,33 @@ public class SqlExecutor extends AbstractSqlExecutor{
 
     /**
      * 对数据执行查询操作，返回一个 用户定义的对象
+     * @param sql sql查询语句
+     * @param params 访问参数
+     * @return 一个对象
+     */
+    public <T> T query(final String sql,final ResultSetHandler<T> rsh,final Object... params){
+        //调用 prepareConnection 获取数据库连接对象
+        Connection conn = this.prepareConnection();
+        //调用自身的 query 方法
+        return this.query(conn,false,sql,rsh,params);
+    }
+
+    /**
+     * 对数据执行查询操作，返回一个 用户定义的对象
+     * @param sql sql查询语句
+     * @param params 访问参数
+     * @return 一个对象
+     */
+    public <T> T query(final Connection conn,final String sql,final ResultSetHandler<T> rsh,final Object... params){
+        //调用自身的 query 方法
+        return this.query(conn,false,sql,rsh,params);
+    }
+
+    /**
+     * 对数据执行查询操作，返回一个 用户定义的对象
      * @param conn 数据库连接
      * @param closeConn 是否关闭数据库连接，输入 true 值关闭数据库连接，false 则不关闭
-     * @param sql sql更新语句
+     * @param sql sql查询语句
      * @param params 访问参数
      * @return 一个对象
      */
@@ -127,7 +151,7 @@ public class SqlExecutor extends AbstractSqlExecutor{
             //使用 ResultSetHandler 对象的 handler 方法，得到一个返回对象
             result = rsh.handler(rs);
         }catch (SQLException e){
-            //抛出更新失败异常
+            //抛出查询失败异常
             throw new DaoException("query defeated...",e);
         }finally {
             try {
