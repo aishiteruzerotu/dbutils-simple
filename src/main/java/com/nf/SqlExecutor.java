@@ -58,21 +58,11 @@ public class SqlExecutor extends AbstractSqlExecutor{
      * @return 被影响的行数
      */
     private int update(final Connection conn,final boolean closeConn,final String sql,final Object... params){
-        //判断数据库连接是否为空
-        if (conn==null){
-            //为空抛出异常
-            throw new DaoException("Connection is null...");
-        }
-        //判断sql语句是否为空
-        if (sql==null||sql.trim().length()==0){
-            //判断是否需要关闭连接
-            if (closeConn){
-                //为真关闭连接
-                ResourceCleanerUtils.closeQuietly(conn);
-            }
-            //为空抛出异常
-            throw new DaoException("Connection is null...");
-        }
+        //检查数据库连接是否为空
+        checkConnection(conn);
+        //检查sql语句是否为空
+        checkSql(conn, closeConn, sql);
+
         //声明PreparedStatement对象 statement 为空
         PreparedStatement statement = null;
         //声明被修改的行数 rows
@@ -109,31 +99,13 @@ public class SqlExecutor extends AbstractSqlExecutor{
      * @return 被影响的行数
      */
     private <T> T query(final Connection conn,final boolean closeConn,final String sql,final ResultSetHandler<T> rsh,final Object... params){
-        //判断数据库连接是否为空
-        if (conn==null){
-            //为空抛出异常
-            throw new DaoException("Connection is null...");
-        }
-        //判断sql语句是否为空
-        if (sql==null||sql.trim().length()==0){
-            //判断是否需要关闭连接
-            if (closeConn){
-                //为真关闭连接
-                ResourceCleanerUtils.closeQuietly(conn);
-            }
-            //为空抛出异常
-            throw new DaoException("Connection is null...");
-        }
-        //判断ResultSetHandler对象是否为空
-        if (rsh==null){
-            //判断是否需要关闭连接
-            if (closeConn){
-                //为真关闭连接
-                ResourceCleanerUtils.closeQuietly(conn);
-            }
-            //为空抛出异常
-            throw new DaoException("ResultSetHandler is null...");
-        }
+        //检查数据库连接是否为空
+        checkConnection(conn);
+        //检查sql语句是否为空
+        checkSql(conn, closeConn, sql);
+        //检查ResultSetHandler对象是否为空
+        checkResultSetHandler(conn, closeConn, rsh);
+
         //声明PreparedStatement对象 statement 为空
         PreparedStatement statement = null;
         //声明返回结果集为空
@@ -243,5 +215,6 @@ public class SqlExecutor extends AbstractSqlExecutor{
         //调用自身的 .update() 方法 , 进行更新操作
         return this.update(conn,closeConn,sql,objects);
     }
+
 
 }
