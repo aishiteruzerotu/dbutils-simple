@@ -1,9 +1,7 @@
 package com.nf;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  * 父类 AbstractSqlExecutor 数据库操作工具
@@ -115,5 +113,35 @@ public abstract class AbstractSqlExecutor {
             //为空抛出异常
             throw new DaoException("Connection is null...");
         }
+    }
+
+    /**
+     * 清理(关闭)结果集
+     * @param rs 结果集
+     * @throws SQLException
+     */
+    protected void close(ResultSet rs) throws SQLException {
+        //调用工具类 ResourceCleanerUtils 的 close 方法
+        ResourceCleanerUtils.close(rs);
+    }
+
+    /**
+     * 安静的关闭连接
+     * @param conn 连接
+     * @throws SQLException
+     */
+    protected void close(Connection conn) throws SQLException {
+        //调用工具类 ResourceCleanerUtils 的 close 方法
+        ResourceCleanerUtils.close(conn);
+    }
+
+    /**
+     * 安静的关闭statement
+     * @param statement 执行器
+     * @throws SQLException
+     */
+    protected void close(Statement statement) throws SQLException {
+        //调用工具类 ResourceCleanerUtils 的 close 方法
+        ResourceCleanerUtils.close(statement);
     }
 }

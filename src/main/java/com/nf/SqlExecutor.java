@@ -78,12 +78,17 @@ public class SqlExecutor extends AbstractSqlExecutor{
             //抛出更新失败异常
             throw new DaoException("update defeated...",e);
         }finally {
-            //关闭执行器 statement
-            ResourceCleanerUtils.closeQuietly(statement);
-            //判断是否需要关闭连接
-            if (closeConn){
-                //为真关闭连接
-                ResourceCleanerUtils.closeQuietly(conn);
+            try {
+                //关闭执行器 statement
+                close(statement);
+                //判断是否需要关闭连接
+                if (closeConn){
+                    //为真关闭连接
+                    close(conn);
+                }
+            }catch (SQLException e){
+                //抛出资源关闭异常
+                throw new DaoException("Resource shutdown failed...",e);
             }
         }
         //返回被修改的行数 rows
@@ -91,12 +96,12 @@ public class SqlExecutor extends AbstractSqlExecutor{
     }
 
     /**
-     * 对数据库进行更新操作，并返回一个被修改的行数
+     * 对数据执行查询操作，返回一个 用户定义的对象
      * @param conn 数据库连接
      * @param closeConn 是否关闭数据库连接，输入 true 值关闭数据库连接，false 则不关闭
      * @param sql sql更新语句
      * @param params 访问参数
-     * @return 被影响的行数
+     * @return 一个对象
      */
     private <T> T query(final Connection conn,final boolean closeConn,final String sql,final ResultSetHandler<T> rsh,final Object... params){
         //检查数据库连接是否为空
@@ -127,13 +132,13 @@ public class SqlExecutor extends AbstractSqlExecutor{
         }finally {
             try {
                 //关闭结果集
-                ResourceCleanerUtils.close(rs);
+                close(rs);
                 //关闭执行器 statement
-                ResourceCleanerUtils.closeQuietly(statement);
+                close(statement);
                 //判断是否需要关闭连接
                 if (closeConn){
                     //为真关闭连接
-                    ResourceCleanerUtils.closeQuietly(conn);
+                    close(conn);
                 }
             }catch (SQLException e){
                 //抛出资源关闭异常
@@ -215,6 +220,5 @@ public class SqlExecutor extends AbstractSqlExecutor{
         //调用自身的 .update() 方法 , 进行更新操作
         return this.update(conn,closeConn,sql,objects);
     }
-
 
 }
