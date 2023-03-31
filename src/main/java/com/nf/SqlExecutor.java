@@ -173,16 +173,4 @@ public class SqlExecutor extends AbstractSqlExecutor{
     }
 
 
-    /**
-     * 给statement赋值，填充访问参数
-     * @param statement 执行器
-     * @param params 访问参数
-     * @return 返回对象可以不必承接，该对象为原本的对象，所以不需要写新的声明，只需要执行原有的对象即可
-     * @throws SQLException
-     */
-    private PreparedStatement fillStatement(PreparedStatement statement, Object... params) throws SQLException {
-        //调用工具类的 fillStatement 方法 给statement赋值
-        return DbUtils.fillStatement(statement,params);
-    }
-
 }
