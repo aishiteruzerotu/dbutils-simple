@@ -1,5 +1,8 @@
 package com.nf;
 
+import com.nf.util.AccessorParametersUtils;
+import com.nf.util.GenerateSQLUtils;
+
 import javax.sql.DataSource;
 import java.sql.*;
 
@@ -183,7 +186,7 @@ public class SqlExecutor extends AbstractSqlExecutor{
         //获取连接
         Connection conn  = this.prepareConnection();
         //获取插入语句
-        String sql = DbUtils.generateInsert(t);
+        String sql = GenerateSQLUtils.generateInsert(t);
         //调用自身 insertObject 方法
         return this.insertObject(conn,true,sql,t);
     }
@@ -211,7 +214,7 @@ public class SqlExecutor extends AbstractSqlExecutor{
      */
     public <T> int insertObject(final Connection conn,T t){
         //获取插入语句
-        String sql = DbUtils.generateInsert(t);
+        String sql = GenerateSQLUtils.generateInsert(t);
         //调用自身 insertObject 方法
         return this.insertObject(conn,false,sql,t);
     }
@@ -240,7 +243,7 @@ public class SqlExecutor extends AbstractSqlExecutor{
      */
     private <T> int insertObject(final Connection conn,final boolean closeConn,final String sql,T t){
         //获取 Object 数组，用于数据库连接参数
-        Object[] objects = DbUtils.getObjects(t);
+        Object[] objects = AccessorParametersUtils.generateObjects(t);
         //调用自身的 .update() 方法 , 进行更新操作
         return this.update(conn,closeConn,sql,objects);
     }

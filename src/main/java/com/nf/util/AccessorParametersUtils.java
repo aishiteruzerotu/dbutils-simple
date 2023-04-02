@@ -1,12 +1,18 @@
-package com.nf;
+package com.nf.util;
+
+import com.nf.ReflexException;
 
 import java.lang.reflect.Field;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
 
-public class DbUtils {
-    private DbUtils() {
+/**
+ * 此类用于访问参数的设置，以及生成
+ * 是访问器相关的工具类
+ */
+public class AccessorParametersUtils {
+    private AccessorParametersUtils() {
     }
 
     /**
@@ -42,7 +48,7 @@ public class DbUtils {
      * @param <T> 可以收任意对象
      * @return Object 访问器数组
      */
-    public static <T> Object[] getObjects(T t){
+    public static <T> Object[] generateObjects(T t){
         //判断实体类对象是否为空
         if (t==null){
             //实体类对象为空抛出异常
@@ -76,34 +82,4 @@ public class DbUtils {
         return objects;
     }
 
-    /**
-     * 给一个实体对象参数，返回该实体的SQL插入语句
-     * @param t 实体对象
-     * @return 返回一个SQL增加语句
-     */
-    public static <T> String generateInsert(T t) {
-        Class<?> clz = t.getClass();
-        String sql = "insert into ";
-        sql += clz.getSimpleName() + "(";
-        Field[] fields = clz.getDeclaredFields();
-        for (int i = 0; i < fields.length; i++) {
-            sql += fields[i].getName();
-            if (i != fields.length - 1) {
-                sql += ",";
-            }
-            if (i == fields.length - 1) {
-                sql += ") values(";
-            }
-        }
-        for (int i = 0; i < fields.length; i++) {
-            sql += "?";
-            if (i != fields.length - 1) {
-                sql += ",";
-            }
-            if (i == fields.length - 1) {
-                sql += ")";
-            }
-        }
-        return sql;
-    }
 }

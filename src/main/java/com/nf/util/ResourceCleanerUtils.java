@@ -1,4 +1,4 @@
-package com.nf;
+package com.nf.util;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

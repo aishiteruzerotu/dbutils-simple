@@ -1,5 +1,8 @@
 package com.nf;
 
+import com.nf.util.AccessorParametersUtils;
+import com.nf.util.ResourceCleanerUtils;
+
 import javax.sql.DataSource;
 import java.sql.*;
 
@@ -61,7 +64,7 @@ public abstract class AbstractSqlExecutor {
      */
     protected PreparedStatement fillStatement(PreparedStatement statement, Object... params) throws SQLException {
         //调用工具类的 fillStatement 方法 给statement赋值
-        return DbUtils.fillStatement(statement,params);
+        return AccessorParametersUtils.fillStatement(statement,params);
     }
 
     /**
