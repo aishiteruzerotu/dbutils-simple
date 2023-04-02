@@ -90,7 +90,7 @@ public abstract class AbstractSqlExecutor {
      * @param closeConn 是否关闭 连接对象
      * @param sql 数据操作字符串
      */
-    protected static void checkSql(Connection conn, boolean closeConn, String sql) {
+    protected void checkSql(Connection conn, boolean closeConn, String sql) {
         //判断sql语句是否为空
         if (sql ==null|| sql.trim().length()==0){
             //判断是否需要关闭连接

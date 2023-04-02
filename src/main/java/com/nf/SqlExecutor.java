@@ -105,7 +105,7 @@ public class SqlExecutor extends AbstractSqlExecutor{
         //调用 prepareConnection 获取数据库连接对象
         Connection conn = this.prepareConnection();
         //调用自身的 query 方法
-        return this.query(conn,false,sql,rsh,params);
+        return this.query(conn,true,sql,rsh,params);
     }
 
     /**
@@ -185,7 +185,7 @@ public class SqlExecutor extends AbstractSqlExecutor{
         //获取插入语句
         String sql = DbUtils.generateInsert(t);
         //调用自身 insertObject 方法
-        return this.insertObject(conn,false,sql,t);
+        return this.insertObject(conn,true,sql,t);
     }
 
     /**
@@ -199,7 +199,7 @@ public class SqlExecutor extends AbstractSqlExecutor{
         //获取连接
         Connection conn  = this.prepareConnection();
         //调用自身 insertObject 方法
-        return this.insertObject(conn,false,sql,t);
+        return this.insertObject(conn,true,sql,t);
     }
 
     /**
@@ -213,7 +213,7 @@ public class SqlExecutor extends AbstractSqlExecutor{
         //获取插入语句
         String sql = DbUtils.generateInsert(t);
         //调用自身 insertObject 方法
-        return this.insertObject(conn,true,sql,t);
+        return this.insertObject(conn,false,sql,t);
     }
 
     /**
@@ -226,7 +226,7 @@ public class SqlExecutor extends AbstractSqlExecutor{
      */
     public <T> int insertObject(final Connection conn,final String sql,T t){
         //调用自身 insertObject 方法
-        return this.insertObject(conn,true,sql,t);
+        return this.insertObject(conn,false,sql,t);
     }
 
     /**
