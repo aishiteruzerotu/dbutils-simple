@@ -9,6 +9,8 @@
 1. int update	增删改操作  返回被修改的行
 2. T query		 查询操作	 返回一个泛型对象 T
 3. int insertObject 通过对象增加一行对应的数据 返回插入的行数
+4. T queryBean 查询操作     返回一个泛型对象 T //该方法只能返回一个实体类
+5. List<T> queryBeanList   查询操作 返回泛型对象序列  //该方法只返回泛型对象序列
 
 
 
