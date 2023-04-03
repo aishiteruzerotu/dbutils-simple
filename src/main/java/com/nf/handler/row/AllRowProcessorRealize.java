@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 该类实现了 RowProcessor 接口的方法
+ * 该类实现了 AllRowProcessor 接口的方法
  */
 public class AllRowProcessorRealize implements AllRowProcessor {
 

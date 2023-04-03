@@ -6,10 +6,12 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 该类用于生成对象
+ */
 public class CreateUtils {
     private CreateUtils() {
     }
-
 
     /**
      * 根据结果集的数据，返回一个Object[]对象
