@@ -1,7 +1,7 @@
 package com.nf.handler;
 
 import com.nf.ResultSetHandler;
-import com.nf.handler.row.RowProcessorRealize;
+import com.nf.handler.row.AllRowProcessorRealize;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,21 +16,21 @@ import java.util.Map;
 public class MapListHandler<T> implements ResultSetHandler<List<Map<String,Object>>> {
 
     //添加依赖对象 RowProcessor
-    private RowProcessor processor;
+    private AllRowProcessor processor;
 
     /**
      * 无参构造函数
      */
     public MapListHandler() {
         //设置默认依赖
-        this(new RowProcessorRealize());
+        this(new AllRowProcessorRealize());
     }
 
     /**
      * 用于设置依赖
      * @param processor 实现依赖对象
      */
-    public MapListHandler(RowProcessor processor) {
+    public MapListHandler(AllRowProcessor processor) {
         this.processor = processor;
     }
 
