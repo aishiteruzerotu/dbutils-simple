@@ -1,5 +1,7 @@
 package com.nf.handler.row.util;
 
+import com.nf.ReflexException;
+
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -34,7 +36,6 @@ public class CreateUtils {
         //返回数组对象
         return objects;
     }
-
 
     /**
      * 根据结果集的数据，返回一个 @{Map<String,Object>} Map对象
@@ -71,4 +72,23 @@ public class CreateUtils {
         return result;
     }
 
+    /**
+     * 用于创建一个对象
+     * @param type
+     * @param <T>
+     * @return
+     */
+    public static <T> T createBean(ResultSet rs,Class<? extends T> type) {
+        //声明对象
+        T result = null;
+        try {
+            //创建一个bean对象
+            result = type.getDeclaredConstructor().newInstance();
+        }catch (Exception e){
+            //抛出异常
+            throw new ReflexException("fail to create bean...",e);
+        }
+        //调用填充方法，返回一个有数据的 bean 对象
+        return BeanUtils.populateBean(rs,result);
+    }
 }

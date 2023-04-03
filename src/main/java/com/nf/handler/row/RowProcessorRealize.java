@@ -21,7 +21,7 @@ public class RowProcessorRealize implements RowProcessor {
      */
     @Override
     public Object[] toArray(ResultSet rs) throws SQLException {
-        //调用自身 createObjects 方法生成 Object[] 对象
+        //CreateUtils 的 createObjects 方法生成 Object[] 对象
         return CreateUtils.createObjects(rs);
     }
 
@@ -34,8 +34,9 @@ public class RowProcessorRealize implements RowProcessor {
      * @throws SQLException
      */
     @Override
-    public <T> T toBean(ResultSet rs) throws SQLException {
-        return null;
+    public <T> T toBean(ResultSet rs,Class<? extends T> type) throws SQLException {
+        //CreateUtils 的 createBean 方法生成 bean 对象
+        return CreateUtils.createBean(rs,type);
     }
 
     /**
@@ -46,7 +47,7 @@ public class RowProcessorRealize implements RowProcessor {
      */
     @Override
     public Map<String, Object> toMap(ResultSet rs) throws SQLException {
-        //调用自身 createMap 方法生成 Map<String, Object> 对象
+        //CreateUtils 的 createMap 方法生成 Map<String, Object> 对象
         return CreateUtils.createMap(rs);
     }
 

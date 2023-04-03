@@ -30,7 +30,7 @@ public class AllRowProcessorRealize implements AllRowProcessor {
         //循环取值
         while (rs.next()){
             //增加数据
-            //createObjects 方法生成添加数据
+            //CreateUtils.createObjects 方法生成添加数据
             result.add(CreateUtils.createObjects(rs));
         }
         //返回 List<Object[]> 序列对象
@@ -48,7 +48,15 @@ public class AllRowProcessorRealize implements AllRowProcessor {
      */
     @Override
     public <T> List<T> toBeanList(ResultSet rs, Class<? extends T> type) throws SQLException {
-        return null;
+        //声明 List<T> 序列对象
+        List<T> result = new ArrayList<>();
+        while (rs.next()){
+            //增加数据
+            //CreateUtils.createBean 方法生成添加数据
+            result.add(CreateUtils.createBean(rs,type));
+        }
+        //返回 List<T> 序列对象
+        return result;
     }
 
     /**
@@ -64,7 +72,7 @@ public class AllRowProcessorRealize implements AllRowProcessor {
         //循环取值
         while (rs.next()){
             //增加数据
-            //createMap 方法生成添加数据
+            //CreateUtils.createMap 方法生成添加数据
             result.add(CreateUtils.createMap(rs));
         }
         //返回 List<Map<String, Object>> 序列对象

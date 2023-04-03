@@ -1,61 +1,52 @@
 package com.nf.handler;
 
 import com.nf.ResultSetHandler;
+import com.nf.handler.row.AllRowProcessorRealize;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 该类实现了 ResultSetHandler<T> 接口
+ * 该类返回的对象是一个 @{List<T>} 对象
+ */
 public class BeanListHandler<T> implements ResultSetHandler<List<T>> {
 
-    private Class<? extends T> clz;
+    //返回类型
+    private Class<? extends T> type;
+    //功能依赖 RowProcessor
+    private AllRowProcessor processor;
 
-    public BeanListHandler(Class<? extends T> clz) {
-        this.clz = clz;
+    /**
+     * 至少要有 类对象 作为参数
+     * @param type 类对象
+     */
+    public BeanListHandler(Class<? extends T> type) {
+        //设置默认对象
+        this(type,new AllRowProcessorRealize());
     }
 
+    /**
+     * 至少要有 类对象 作为参数
+     * @param type 类对象
+     * @param processor 依赖对象
+     */
+    public BeanListHandler(Class<? extends T> type, AllRowProcessor processor) {
+        this.type = type;
+        this.processor = processor;
+    }
+
+    /**
+     * 该方法返回一个 List<T> 的序列对象
+     * @param rs 数据库查询结果集
+     * @return @{List<T>} 序列对象
+     * @throws SQLException
+     */
     @Override
     public List<T> handler(ResultSet rs) throws SQLException {
-        List<T> list = new ArrayList<>();
-
-        ResultSetMetaData metaData = rs.getMetaData();
-        int columnCount = metaData.getColumnCount();
-        while (rs.next()) {
-            T t = null;
-            try {
-                t = clz.getDeclaredConstructor().newInstance();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            }
-            try {
-                bat(clz, rs, metaData, columnCount, t);
-            } catch (NoSuchFieldException |IllegalAccessException e) {
-                e.printStackTrace();
-            }
-            list.add(t);
-        }
-        return list;
-
-    }
-    public static  <T> void bat(Class<? extends T> clz, ResultSet rs, ResultSetMetaData metaData, int columnCount, T t) throws SQLException, NoSuchFieldException, IllegalAccessException {
-        for (int i = 1; i <= columnCount; i++) {
-            String columnName = metaData.getColumnName(i);
-            Object columnValue = rs.getObject(columnName);
-            Field field = clz.getDeclaredField(columnName);
-            field.setAccessible(true);
-            field.set(t, columnValue);
-            field.setAccessible(false);
-        }
+        //使用依赖的 toBeanList 方法
+        return this.processor.toBeanList(rs,this.type);
     }
 }
 
