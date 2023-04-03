@@ -12,6 +12,8 @@ import java.sql.SQLException;
  */
 public class ArrayHandler implements ResultSetHandler<Object[]> {
 
+    private static final Object[] OBJECTS = new Object[0];
+
     /**
      * 该方法返回一个 Object数组
      * @param rs 数据库查询结果集
@@ -36,7 +38,7 @@ public class ArrayHandler implements ResultSetHandler<Object[]> {
             //返回数组对象
             return objects;
         }
-        //rs为空时，返回null
-        return null;
+        //rs为空时，返回 OBJECTS 对象
+        return OBJECTS;
     }
 }
