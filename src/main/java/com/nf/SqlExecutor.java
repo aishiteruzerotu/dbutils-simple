@@ -1,10 +1,14 @@
 package com.nf;
 
+import com.nf.handler.BeanHandler;
+import com.nf.handler.BeanListHandler;
 import com.nf.util.AccessorParametersUtils;
 import com.nf.util.GenerateSQLUtils;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 该类用于数据库操作
@@ -248,4 +252,60 @@ public class SqlExecutor extends AbstractSqlExecutor{
         return this.update(conn,closeConn,sql,objects);
     }
 
+    public <T> T queryBean(final Connection conn,final boolean closeConn,final String sql,final Class<? extends T> clz,final Object... params){
+        ResultSetHandler<T> rsh = new BeanHandler<>(clz);
+        return this.query(conn,closeConn,sql,rsh,params);
+    }
+
+    public <T> List<T> queryBeanList(final Connection conn, final boolean closeConn, final String sql, Class<? extends T> clz, final Object... params){
+        //检查数据库连接是否为空
+        checkConnection(conn);
+        //检查sql语句是否为空
+        checkSql(conn, closeConn, sql);
+        //检查 类 对象是否为空
+        checkClass(conn, closeConn, clz);
+
+        //声明PreparedStatement对象 statement 为空
+        PreparedStatement statement = null;
+        //声明返回结果集为空
+        ResultSet rs = null;
+
+        List<T> list = new ArrayList<>();
+
+        try {
+            //从数据库连接中获取 PreparedStatement 对象 并赋值给 statement
+            statement = conn.prepareStatement(sql);
+            //给执行器 statement 填入参数
+            statement = this.fillStatement(statement,params);
+            //使用statement执行器的.executeQuery() 查询方法，得到查询结果集
+            rs = statement.executeQuery();
+            ResultSetMetaData metaData = rs.getMetaData();
+            int columnCount = metaData.getColumnCount();
+            while (rs.next()) {
+                T t = clz.getDeclaredConstructor().newInstance();
+
+                BeanListHandler.bat(clz, rs, metaData, columnCount, t);
+
+                list.add(t);
+            }
+        }catch (Exception e){
+            throw new DaoException(e);
+        }finally {
+            try {
+                //关闭结果集
+                close(rs);
+                //关闭执行器 statement
+                close(statement);
+                //判断是否需要关闭连接
+                if (closeConn){
+                    //为真关闭连接
+                    close(conn);
+                }
+            }catch (SQLException e){
+                //抛出资源关闭异常
+                throw new DaoException("Resource shutdown failed...",e);
+            }
+        }
+        return list;
+    }
 }

@@ -67,6 +67,28 @@ public abstract class AbstractSqlExecutor {
         return AccessorParametersUtils.fillStatement(statement,params);
     }
 
+
+    /**
+     * 判断 ResultSetHandler 对象是否为空
+     * @param conn 连接对象
+     * @param closeConn 是否关闭 连接对象
+     * @param clz 类 对象
+     * @param <T>
+     */
+    protected <T> void checkClass(Connection conn, boolean closeConn, Class<? extends T> clz) {
+        //判断 类 对象是否为空
+        if (clz ==null){
+            //判断是否需要关闭连接
+            if (closeConn){
+                //为真关闭连接
+                ResourceCleanerUtils.closeQuietly(conn);
+            }
+            //为空抛出异常
+            throw new DaoException("ResultSetHandler is null...");
+        }
+    }
+
+
     /**
      * 判断 ResultSetHandler 对象是否为空
      * @param conn 连接对象
