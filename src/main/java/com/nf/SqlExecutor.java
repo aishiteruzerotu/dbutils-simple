@@ -7,14 +7,13 @@ import com.nf.util.GenerateSQLUtils;
 
 import javax.sql.DataSource;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 该类用于数据库操作
  * 是数据库操作工具类
  */
-public class SqlExecutor extends AbstractSqlExecutor{
+public class SqlExecutor extends AbstractSqlExecutor {
 
     /**
      * 默认构造器
@@ -25,6 +24,7 @@ public class SqlExecutor extends AbstractSqlExecutor{
 
     /**
      * 创建对象
+     *
      * @param ds DataSource对象
      */
     public SqlExecutor(final DataSource ds) {
@@ -33,38 +33,60 @@ public class SqlExecutor extends AbstractSqlExecutor{
 
     /**
      * 对数据库进行更新操作，并返回一个被修改的行数
-     * @param sql sql更新语句
+     *
+     * @param sql    sql更新语句
      * @param params 访问参数
      * @return 被影响的行数
      */
-    public int update(final String sql,final Object... params){
+    public int update(final String sql, final Object... params) {
         //声明一个数据库连接 Connection 对象，调用自身方法为其赋值
         Connection conn = this.prepareConnection();
         //调用自身的 .update() 方法
-        return this.update(conn,true,sql,params);
+        return this.update(conn, true, sql, params);
     }
 
     /**
      * 对数据库进行更新操作，并返回一个被修改的行数
-     * @param conn 数据库连接
-     * @param sql sql更新语句
+     *
+     * @param conn   数据库连接
+     * @param sql    sql更新语句
      * @param params 访问参数
      * @return 被影响的行数
      */
-    public int update(final Connection conn,final String sql,final Object... params){
+    public int update(final Connection conn, final String sql, final Object... params) {
         //调用自身的 .update() 方法
-        return this.update(conn,false,sql,params);
+        return this.update(conn, false, sql, params);
     }
 
     /**
      * 对数据库进行更新操作，并返回一个被修改的行数
-     * @param conn 数据库连接
+     *
+     * @param conn      数据库连接
      * @param closeConn 是否关闭数据库连接，输入 true 值关闭数据库连接，false 则不关闭
-     * @param sql sql更新语句
-     * @param params 访问参数
+     * @param sql       sql更新语句
+     * @param params    访问参数
      * @return 被影响的行数
      */
-    private int update(final Connection conn,final boolean closeConn,final String sql,final Object... params){
+    private int update(final Connection conn, final boolean closeConn, final String sql, final Object... params) {
+        try {
+            //捕获异常
+            return this.update0(conn, closeConn, sql, params);
+        } catch (SQLException e) {
+            //抛出更新失败异常
+            throw new DaoException("update defeated...", e);
+        }
+    }
+
+    /**
+     * 对数据库进行更新操作，并返回一个被修改的行数
+     *
+     * @param conn      数据库连接
+     * @param closeConn 是否关闭数据库连接，输入 true 值关闭数据库连接，false 则不关闭
+     * @param sql       sql更新语句
+     * @param params    访问参数
+     * @return 被影响的行数
+     */
+    private int update0(final Connection conn, final boolean closeConn, final String sql, final Object... params) throws SQLException {
         //检查数据库连接是否为空
         checkConnection(conn);
         //检查sql语句是否为空
@@ -78,24 +100,19 @@ public class SqlExecutor extends AbstractSqlExecutor{
             //从数据库连接中获取 PreparedStatement 对象 并赋值给 statement
             statement = conn.prepareStatement(sql);
             //给执行器 statement 填入参数
-            statement = this.fillStatement(statement,params);
+            statement = this.fillStatement(statement, params);
             //使用statement执行器的.executeUpdate() 更新方法，并将返回值 赋值给 rows
             rows = statement.executeUpdate();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             //抛出更新失败异常
-            throw new DaoException("update defeated...",e);
-        }finally {
-            try {
-                //关闭执行器 statement
-                close(statement);
-                //判断是否需要关闭连接
-                if (closeConn){
-                    //为真关闭连接
-                    close(conn);
-                }
-            }catch (SQLException e){
-                //抛出资源关闭异常
-                throw new DaoException("Resource shutdown failed...",e);
+            throw new DaoException("update defeated...", e);
+        } finally {
+            //关闭执行器 statement
+            close(statement);
+            //判断是否需要关闭连接
+            if (closeConn) {
+                //为真关闭连接
+                close(conn);
             }
         }
         //返回被修改的行数 rows
@@ -104,37 +121,59 @@ public class SqlExecutor extends AbstractSqlExecutor{
 
     /**
      * 对数据执行查询操作，返回一个 用户定义的对象
-     * @param sql sql查询语句
+     *
+     * @param sql    sql查询语句
      * @param params 访问参数
      * @return 一个对象
      */
-    public <T> T query(final String sql,final ResultSetHandler<T> rsh,final Object... params){
+    public <T> T query(final String sql, final ResultSetHandler<T> rsh, final Object... params) {
         //调用 prepareConnection 获取数据库连接对象
         Connection conn = this.prepareConnection();
         //调用自身的 query 方法
-        return this.query(conn,true,sql,rsh,params);
+        return this.query(conn, true, sql, rsh, params);
     }
 
     /**
      * 对数据执行查询操作，返回一个 用户定义的对象
-     * @param sql sql查询语句
+     *
+     * @param sql    sql查询语句
      * @param params 访问参数
      * @return 一个对象
      */
-    public <T> T query(final Connection conn,final String sql,final ResultSetHandler<T> rsh,final Object... params){
+    public <T> T query(final Connection conn, final String sql, final ResultSetHandler<T> rsh, final Object... params) {
         //调用自身的 query 方法
-        return this.query(conn,false,sql,rsh,params);
+        return this.query(conn, false, sql, rsh, params);
     }
 
     /**
      * 对数据执行查询操作，返回一个 用户定义的对象
-     * @param conn 数据库连接
+     *
+     * @param conn      数据库连接
      * @param closeConn 是否关闭数据库连接，输入 true 值关闭数据库连接，false 则不关闭
-     * @param sql sql查询语句
-     * @param params 访问参数
+     * @param sql       sql查询语句
+     * @param params    访问参数
      * @return 一个对象
      */
-    private <T> T query(final Connection conn,final boolean closeConn,final String sql,final ResultSetHandler<T> rsh,final Object... params){
+    private <T> T query(final Connection conn, final boolean closeConn, final String sql, final ResultSetHandler<T> rsh, final Object... params) {
+        try {
+            //捕获异常
+            return this.query0(conn, closeConn, sql, rsh, params);
+        } catch (SQLException e) {
+            //抛出查询失败异常
+            throw new DaoException("query defeated...", e);
+        }
+    }
+
+    /**
+     * 对数据执行查询操作，返回一个 用户定义的对象
+     *
+     * @param conn      数据库连接
+     * @param closeConn 是否关闭数据库连接，输入 true 值关闭数据库连接，false 则不关闭
+     * @param sql       sql查询语句
+     * @param params    访问参数
+     * @return 一个对象
+     */
+    private <T> T query0(final Connection conn, final boolean closeConn, final String sql, final ResultSetHandler<T> rsh, final Object... params) throws SQLException {
         //检查数据库连接是否为空
         checkConnection(conn);
         //检查sql语句是否为空
@@ -152,29 +191,25 @@ public class SqlExecutor extends AbstractSqlExecutor{
             //从数据库连接中获取 PreparedStatement 对象 并赋值给 statement
             statement = conn.prepareStatement(sql);
             //给执行器 statement 填入参数
-            statement = this.fillStatement(statement,params);
+            statement = this.fillStatement(statement, params);
             //使用statement执行器的.executeQuery() 查询方法，得到查询结果集
             rs = statement.executeQuery();
             //使用 ResultSetHandler 对象的 handler 方法，得到一个返回对象
             result = rsh.handler(rs);
-        }catch (SQLException e){
+        } catch (SQLException e) {
             //抛出查询失败异常
-            throw new DaoException("query defeated...",e);
-        }finally {
-            try {
-                //关闭结果集
-                close(rs);
-                //关闭执行器 statement
-                close(statement);
-                //判断是否需要关闭连接
-                if (closeConn){
-                    //为真关闭连接
-                    close(conn);
-                }
-            }catch (SQLException e){
-                //抛出资源关闭异常
-                throw new DaoException("Resource shutdown failed...",e);
+            throw new DaoException("query defeated...", e);
+        } finally {
+            //关闭结果集
+            close(rs);
+            //关闭执行器 statement
+            close(statement);
+            //判断是否需要关闭连接
+            if (closeConn) {
+                //为真关闭连接
+                close(conn);
             }
+
         }
         //返回对象 result
         return result;
@@ -182,83 +217,88 @@ public class SqlExecutor extends AbstractSqlExecutor{
 
     /**
      * 通过对象可以自动插入一行对应的数据
-     * @param t 对象
+     *
+     * @param t   对象
      * @param <T> 可以接收泛型对象
      * @return 一个被修改的行数
      */
-    public <T> int insertObject(T t){
+    public <T> int insertObject(T t) {
         //获取连接
-        Connection conn  = this.prepareConnection();
+        Connection conn = this.prepareConnection();
         //获取插入语句
         String sql = GenerateSQLUtils.generateInsert(t);
         //调用自身 insertObject 方法
-        return this.insertObject(conn,true,sql,t);
+        return this.insertObject(conn, true, sql, t);
     }
 
     /**
      * 通过对象可以自动插入一行对应的数据
+     *
      * @param sql sql语句
-     * @param t 对象
+     * @param t   对象
      * @param <T> 可以接收泛型对象
      * @return 一个被修改的行数
      */
-    public <T> int insertObject(final String sql,T t){
+    public <T> int insertObject(final String sql, T t) {
         //获取连接
-        Connection conn  = this.prepareConnection();
+        Connection conn = this.prepareConnection();
         //调用自身 insertObject 方法
-        return this.insertObject(conn,true,sql,t);
+        return this.insertObject(conn, true, sql, t);
     }
 
     /**
      * 通过对象可以自动插入一行对应的数据
+     *
      * @param conn 数据库连接
-     * @param t 对象
-     * @param <T> 可以接收泛型对象
+     * @param t    对象
+     * @param <T>  可以接收泛型对象
      * @return 一个被修改的行数
      */
-    public <T> int insertObject(final Connection conn,T t){
+    public <T> int insertObject(final Connection conn, T t) {
         //获取插入语句
         String sql = GenerateSQLUtils.generateInsert(t);
         //调用自身 insertObject 方法
-        return this.insertObject(conn,false,sql,t);
+        return this.insertObject(conn, false, sql, t);
     }
 
     /**
      * 通过对象可以自动插入一行对应的数据
+     *
      * @param conn 数据库连接
-     * @param sql sql语句
-     * @param t 对象
-     * @param <T> 可以接收泛型对象
+     * @param sql  sql语句
+     * @param t    对象
+     * @param <T>  可以接收泛型对象
      * @return 一个被修改的行数
      */
-    public <T> int insertObject(final Connection conn,final String sql,T t){
+    public <T> int insertObject(final Connection conn, final String sql, T t) {
         //调用自身 insertObject 方法
-        return this.insertObject(conn,false,sql,t);
+        return this.insertObject(conn, false, sql, t);
     }
 
     /**
      * 通过对象可以自动插入一行对应的数据
-     * @param conn 数据库连接
+     *
+     * @param conn      数据库连接
      * @param closeConn 是否关闭数据库连接
-     * @param sql sql语句
-     * @param t 对象
-     * @param <T> 可以接收泛型对象
+     * @param sql       sql语句
+     * @param t         对象
+     * @param <T>       可以接收泛型对象
      * @return 一个被修改的行数
      */
-    private <T> int insertObject(final Connection conn,final boolean closeConn,final String sql,T t){
+    private <T> int insertObject(final Connection conn, final boolean closeConn, final String sql, T t) {
         //获取 Object 数组，用于数据库连接参数
         Object[] objects = AccessorParametersUtils.generateObjects(t);
         //调用自身的 .update() 方法 , 进行更新操作
-        return this.update(conn,closeConn,sql,objects);
+        return this.update(conn, closeConn, sql, objects);
     }
 
-    public <T> T queryBean(final Connection conn,final boolean closeConn,final String sql,final Class<? extends T> clz,final Object... params){
+    public <T> T queryBean(final Connection conn, final boolean closeConn, final String sql, final Class<? extends T> clz, final Object... params) {
         ResultSetHandler<T> rsh = new BeanHandler<>(clz);
-        return this.query(conn,closeConn,sql,rsh,params);
+        return this.query(conn, closeConn, sql, rsh, params);
     }
 
-    public <T> List<T> queryBeanList(final Connection conn, final boolean closeConn, final String sql, Class<? extends T> clz, final Object... params){
+    public <T> List<T> queryBeanList(final Connection conn, final boolean closeConn, final String sql, Class<? extends T> clz, final Object... params) {
         BeanListHandler<List<T>> blh = new BeanListHandler(clz);
-        return (List<T>) this.query(sql,blh,params);
+        return (List<T>) this.query(sql, blh, params);
     }
 }
