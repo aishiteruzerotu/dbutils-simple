@@ -1,6 +1,5 @@
 package com.nf.handler;
 
-import com.nf.ResultSetHandler;
 import com.nf.handler.row.AllRowProcessorRealize;
 
 import java.sql.ResultSet;
@@ -11,12 +10,10 @@ import java.util.List;
  * 该类实现了 ResultSetHandler<T> 接口
  * 该类返回的对象是一个 @{List<T>} 对象
  */
-public class BeanListHandler<T> implements ResultSetHandler<List<T>> {
+public class BeanListHandler<T> extends AbstractAllResultSetHandler<List<T>> {
 
     //返回类型
     private Class<? extends T> type;
-    //功能依赖 RowProcessor
-    private AllRowProcessor processor;
 
     /**
      * 至少要有 类对象 作为参数

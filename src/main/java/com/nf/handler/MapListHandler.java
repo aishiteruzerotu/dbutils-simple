@@ -1,8 +1,5 @@
 package com.nf.handler;
 
-import com.nf.ResultSetHandler;
-import com.nf.handler.row.AllRowProcessorRealize;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -13,17 +10,12 @@ import java.util.Map;
  * 该类实现了 ResultSetHandler<T> 接口
  * 该类返回的对象是一个 @{List<Map<String,Object>>} 列表
  */
-public class MapListHandler<T> implements ResultSetHandler<List<Map<String,Object>>> {
-
-    //添加依赖对象 RowProcessor
-    private AllRowProcessor processor;
+public class MapListHandler<T> extends AbstractAllResultSetHandler<List<Map<String,Object>>> {
 
     /**
      * 无参构造函数
      */
     public MapListHandler() {
-        //设置默认依赖
-        this(new AllRowProcessorRealize());
     }
 
     /**

@@ -1,20 +1,14 @@
 package com.nf.handler;
 
-import com.nf.ResultSetHandler;
-import com.nf.handler.row.RowProcessorRealize;
-
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 /**
  * 该类实现了 ResultSetHandler<T> 接口
  * 该类返回的对象是一个 Object 数组
  */
-public class ArrayHandler implements ResultSetHandler<Object[]> {
+public class ArrayHandler<T> extends AbstractOneResultSetHandler<Object[]> {
 
-    //添加依赖对象 RowProcessor
-    private RowProcessor processor;
     //如果数据集没有数据则默认方法一个没有长度的Object数组对象
     private static final Object[] OBJECTS = new Object[0];
 
@@ -22,8 +16,6 @@ public class ArrayHandler implements ResultSetHandler<Object[]> {
      * 无参构造函数
      */
     public ArrayHandler() {
-        //设置默认依赖
-        this(new RowProcessorRealize());
     }
 
     /**
