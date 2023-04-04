@@ -28,13 +28,35 @@
 
 这样，框架的用户在不满意我们框架的功能的时候，他可以选择重写SqlExecutor或者重写AbstractSqlExecutor
 
-##	4、实现接口ResultSetHandler
+#	4、实现接口ResultSetHandler
 
 ​	此接口方法用于处理数据库查询结果集
 
 ##	4.1ArrayHandler
 
 ​	该方法返回一个 Object数组
+
+##	4.2ArrayListHandler
+
+​	该方法返回一个List序列的Object数组集合对象
+
+##	4.3ScalarHandler
+
+​	返回一行一列的数据
+
+## 4.4Map<String,Object>
+
+​	MapHandler ：返回以一个Map对象
+
+​	MapListHandler ：返回一个List序列的Map合集对象
+
+##	4.5Bean
+
+​	BeanHandler ：返回以一个Bean对象
+
+​	BeanListHandler ：返回一个List序列的Bean合集对象
+
+
 
 
 
