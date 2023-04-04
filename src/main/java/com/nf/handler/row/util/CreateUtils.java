@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -45,7 +46,7 @@ public class CreateUtils {
      */
     public static Map<String, Object> createMap(ResultSet rs) throws SQLException{
         //声明一个 Map<String, Object> 对象
-        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> result = new LinkedHashMap<>();
         //获取 ResultSetMetaData 源数据对象
         ResultSetMetaData metaData = rs.getMetaData();
         //获取列的长度

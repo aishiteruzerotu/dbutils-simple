@@ -5,6 +5,7 @@ import com.nf.handler.row.RowProcessorRealize;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class KeyedHandler<T> extends AbstractOneResultSetHandler<Map<Object,Map<String,Object>>> {
@@ -78,7 +79,7 @@ public class KeyedHandler<T> extends AbstractOneResultSetHandler<Map<Object,Map<
 
     @Override
     public Map<Object, Map<String, Object>> handler(ResultSet rs) throws SQLException {
-        Map<Object, Map<String, Object>> result = new HashMap<>();
+        Map<Object, Map<String, Object>> result = new LinkedHashMap<>();
         while (rs.next()){
             result.put(createKey(rs),this.processor.toMap(rs));
         }
