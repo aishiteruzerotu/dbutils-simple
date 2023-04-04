@@ -7,7 +7,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * 该类实现了 ResultSetHandler<T> 接口
+ * 该类继承了 AbstractAllResultSetHandler<T>
+ * 实现了 ResultSetHandler<T> 接口
  * 该类返回的对象是一个 @{List<T>} 对象
  */
 public class BeanListHandler<T> extends AbstractAllResultSetHandler<List<T>> {

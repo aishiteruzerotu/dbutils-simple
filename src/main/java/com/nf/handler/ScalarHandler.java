@@ -6,8 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
+ * 该类实现了 ResultSetHandler<T> 接口
  * 该类只返回第一行指定一列的数据
- *
  * @param <T>
  */
 public class ScalarHandler<T> implements ResultSetHandler<T> {

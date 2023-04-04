@@ -5,7 +5,8 @@ import java.sql.SQLException;
 import java.util.Map;
 
 /**
- * 该类实现了 ResultSetHandler<T> 接口
+ * 该类继承了 AbstractOneResultSetHandler<T>
+ * 实现了 ResultSetHandler<T> 接口
  * 该类返回的对象是一个 @{Map<String,Object>} 对象
  */
 public class MapHandled<T> extends AbstractOneResultSetHandler<Map<String,Object>> {

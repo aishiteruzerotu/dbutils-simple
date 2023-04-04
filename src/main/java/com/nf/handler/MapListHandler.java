@@ -7,7 +7,8 @@ import java.util.Map;
 
 
 /**
- * 该类实现了 ResultSetHandler<T> 接口
+ * 该类继承了 AbstractAllResultSetHandler<T>
+ * 实现了 ResultSetHandler<T> 接口
  * 该类返回的对象是一个 @{List<Map<String,Object>>} 列表
  */
 public class MapListHandler<T> extends AbstractAllResultSetHandler<List<Map<String,Object>>> {

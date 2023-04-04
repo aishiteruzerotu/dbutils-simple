@@ -6,7 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * 该类实现了 ResultSetHandler<T> 接口
+ * 该类继承了 AbstractOneResultSetHandler<T>
+ * 实现了 ResultSetHandler<T> 接口
  * 该类返回的对象是一个 实体类
  */
 public class BeanHandler<T> extends AbstractOneResultSetHandler<T> {
