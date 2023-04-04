@@ -38,9 +38,9 @@ public class BeanListHandler<T> implements ResultSetHandler<List<T>> {
     }
 
     /**
-     * 该方法返回一个 List<T> 的序列对象
+     * 该方法返回一个 List<T> 的列表对象
      * @param rs 数据库查询结果集
-     * @return @{List<T>} 序列对象
+     * @return @{List<T>} 列表对象
      * @throws SQLException
      */
     @Override

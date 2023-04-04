@@ -16,11 +16,11 @@ public interface AllRowProcessor {
     List<Object[]> toArrayList(ResultSet rs)throws SQLException;
 
     /**
-     * 返回一个 泛型对象 序列
+     * 返回一个 泛型对象 列表
      * 一般为实体类的数组集合
      * @param rs 结果集
      * @param <T> 泛型对象
-     * @return @{List<T>} 序列
+     * @return @{List<T>} 列表
      * @return 一个实体类对象，包含其数据
      * @throws SQLException
      */

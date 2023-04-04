@@ -11,7 +11,7 @@ import java.util.Map;
 
 /**
  * 该类实现了 ResultSetHandler<T> 接口
- * 该类返回的对象是一个 @{List<Map<String,Object>>} 序列
+ * 该类返回的对象是一个 @{List<Map<String,Object>>} 列表
  */
 public class MapListHandler<T> implements ResultSetHandler<List<Map<String,Object>>> {
 
@@ -35,9 +35,9 @@ public class MapListHandler<T> implements ResultSetHandler<List<Map<String,Objec
     }
 
     /**
-     * 该方法返回的对象是一个 @{List<Map<String,Object>>} 序列
+     * 该方法返回的对象是一个 @{List<Map<String,Object>>} 列表
      * @param rs 数据库查询结果集
-     * @return @{List<Map<String,Object>>} 序列对象
+     * @return @{List<Map<String,Object>>} 列表对象
      * @throws SQLException
      */
     @Override

@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * 该类实现了 ResultSetHandler<T> 接口
- * 该类返回的对象是一个 List<Object[]> 序列
+ * 该类返回的对象是一个 List<Object[]> 列表
  */
 public class ArrayListHandler<T> implements ResultSetHandler<List<Object[]>> {
 
@@ -33,9 +33,9 @@ public class ArrayListHandler<T> implements ResultSetHandler<List<Object[]>> {
     }
 
     /**
-     * 该方法返回的对象是一个 @{List<Object[]>}序列
+     * 该方法返回的对象是一个 @{List<Object[]>}列表
      * @param rs 数据库查询结果集
-     * @return @{List<Object[]>} 序列
+     * @return @{List<Object[]>} 列表
      * @throws SQLException
      */
     @Override
