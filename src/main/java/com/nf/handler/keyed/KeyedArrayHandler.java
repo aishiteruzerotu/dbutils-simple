@@ -1,4 +1,4 @@
-package com.nf.handler;
+package com.nf.handler.keyed;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

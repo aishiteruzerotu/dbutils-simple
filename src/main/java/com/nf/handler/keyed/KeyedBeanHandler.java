@@ -1,6 +1,6 @@
-package com.nf.handler;
+package com.nf.handler.keyed;
 
-import com.nf.handler.row.RowProcessorRealize;
+import com.nf.handler.RowProcessor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

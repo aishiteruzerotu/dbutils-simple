@@ -1,5 +1,7 @@
-package com.nf.handler;
+package com.nf.handler.keyed;
 
+import com.nf.handler.AbstractOneResultSetHandler;
+import com.nf.handler.RowProcessor;
 import com.nf.handler.row.RowProcessorRealize;
 
 import java.sql.ResultSet;
@@ -15,7 +17,7 @@ import java.util.Map;
  * K 值所在的行，则会打包成一个泛型 <V> 的对象，作为返回对象 Value
  * 由此，该返回的 Map 对象，一条数据包含了数据库查询的一条数据
  */
-public abstract class AbstractKeyedHandler<V> extends AbstractOneResultSetHandler<Map<Object, V>>{
+public abstract class AbstractKeyedHandler<V> extends AbstractOneResultSetHandler<Map<Object, V>> {
     //取 K 值行数
     protected Integer columIndex;
     //取 K 值行名称
@@ -54,7 +56,7 @@ public abstract class AbstractKeyedHandler<V> extends AbstractOneResultSetHandle
      * 赋值取 K 值行数
      * @param columIndex 取 K 值行数
      */
-    public AbstractKeyedHandler(Integer columIndex,RowProcessor processor) {
+    public AbstractKeyedHandler(Integer columIndex, RowProcessor processor) {
         this(columIndex,COLUMNAMEDEFAULTVALUE,processor);
     }
 
