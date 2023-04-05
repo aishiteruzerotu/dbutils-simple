@@ -1,7 +1,5 @@
 package com.nf.handler;
 
-import com.nf.handler.row.AllRowProcessorRealize;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -22,7 +20,7 @@ public class BeanListHandler<T> extends AbstractAllResultSetHandler<List<T>> {
      */
     public BeanListHandler(Class<? extends T> type) {
         //设置默认对象
-        this(type,new AllRowProcessorRealize());
+        this(type,DEFAULTPROCESSOR);
     }
 
     /**

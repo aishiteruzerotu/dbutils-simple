@@ -6,13 +6,15 @@ import com.nf.handler.row.AllRowProcessorRealize;
 public abstract class AbstractAllResultSetHandler<T> implements ResultSetHandler<T> {
     //添加依赖对象 AllRowProcessor
     protected AllRowProcessor processor;
+    //默认依赖
+    protected static final AllRowProcessor DEFAULTPROCESSOR = new AllRowProcessorRealize();
 
     /**
      * 无参构造函数
      */
     public AbstractAllResultSetHandler() {
         //设置默认依赖
-        this(new AllRowProcessorRealize());
+        this(DEFAULTPROCESSOR);
     }
 
     /**

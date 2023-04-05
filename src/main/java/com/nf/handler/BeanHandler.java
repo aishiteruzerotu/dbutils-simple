@@ -1,7 +1,5 @@
 package com.nf.handler;
 
-import com.nf.handler.row.RowProcessorRealize;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -20,7 +18,7 @@ public class BeanHandler<T> extends AbstractOneResultSetHandler<T> {
      */
     public BeanHandler(Class<? extends T> type) {
         //设置默认对象
-        this(type,new RowProcessorRealize());
+        this(type,DEFAULTPROCESSOR);
     }
 
     /**

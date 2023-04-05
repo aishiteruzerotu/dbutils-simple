@@ -15,6 +15,10 @@ public class ScalarHandler<T> implements ResultSetHandler<T> {
     private final int columnIndex;
     //取值行名称
     private final String columnName;
+    //行数默认值
+    protected static final Integer COLUMINDEXDEFAULTVALUE = 1;
+    //行名称默认值
+    protected static final String COLUMNAMEDEFAULTVALUE = null;
 
     /**
      * 无参构造函数
@@ -28,14 +32,14 @@ public class ScalarHandler<T> implements ResultSetHandler<T> {
      * 设置取值行数
      */
     public ScalarHandler(int columnIndex) {
-        this(columnIndex, null);
+        this(columnIndex, COLUMNAMEDEFAULTVALUE);
     }
 
     /**
      * 设置取值行名称
      */
     public ScalarHandler(String columnName) {
-        this(1, columnName);
+        this(COLUMINDEXDEFAULTVALUE, columnName);
     }
 
     /**

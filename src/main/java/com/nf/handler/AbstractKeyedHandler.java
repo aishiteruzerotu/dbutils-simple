@@ -2,7 +2,6 @@ package com.nf.handler;
 
 import com.nf.handler.row.RowProcessorRealize;
 
-import java.awt.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
@@ -31,7 +30,7 @@ public abstract class AbstractKeyedHandler<V> extends AbstractOneResultSetHandle
      * 默认取第一行作为 K 值
      */
     public AbstractKeyedHandler() {
-        this(COLUMINDEXDEFAULTVALUE,COLUMNAMEDEFAULTVALUE,new RowProcessorRealize());
+        this(COLUMINDEXDEFAULTVALUE,COLUMNAMEDEFAULTVALUE,DEFAULTPROCESSOR);
     }
 
     /**
@@ -47,7 +46,7 @@ public abstract class AbstractKeyedHandler<V> extends AbstractOneResultSetHandle
      * @param columName 取 K 值行名称
      */
     public AbstractKeyedHandler( String columName) {
-        this(COLUMINDEXDEFAULTVALUE,columName,new RowProcessorRealize());
+        this(COLUMINDEXDEFAULTVALUE,columName,DEFAULTPROCESSOR);
     }
 
     /**
