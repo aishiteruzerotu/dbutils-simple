@@ -340,6 +340,22 @@ public class SqlExecutor extends AbstractSqlExecutor {
 
     /**
      * 通过类型对象，返回对应的实体类列表对象
+     * @param clz       类对象
+     * @param params    参数列表
+     * @param <T>       可以接收泛型对象
+     * @return @{List<T>} 实体类列表对象
+     */
+    public <T> List<T> queryBeanList( Class<? extends T> clz, final Object... params){
+        //获取连接
+        Connection conn = this.prepareConnection();
+        //获取查询字段
+        String sql = GenerateSQLUtils.generateSelect(clz);
+        //调用自身 queryBeanList 方法
+        return this.queryBeanList(conn,true,sql,clz,params);
+    }
+
+    /**
+     * 通过类型对象，返回对应的实体类列表对象
      * @param sql       sql语句
      * @param clz       类对象
      * @param params    参数列表
@@ -351,6 +367,21 @@ public class SqlExecutor extends AbstractSqlExecutor {
         Connection conn = this.prepareConnection();
         //调用自身 queryBeanList 方法
         return this.queryBeanList(conn,true,sql,clz,params);
+    }
+
+    /**
+     * 通过类型对象，返回对应的实体类列表对象
+     * @param conn      数据库连接
+     * @param clz       类对象
+     * @param params    参数列表
+     * @param <T>       可以接收泛型对象
+     * @return @{List<T>} 实体类列表对象
+     */
+    public <T> List<T> queryBeanList(final Connection conn, Class<? extends T> clz, final Object... params){
+        //获取查询字段
+        String sql = GenerateSQLUtils.generateSelect(clz);
+        //调用自身 queryBeanList 方法
+        return this.queryBeanList(conn,false,sql,clz,params);
     }
 
     /**
