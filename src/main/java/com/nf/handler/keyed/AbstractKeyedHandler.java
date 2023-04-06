@@ -115,18 +115,13 @@ public abstract class AbstractKeyedHandler<V> extends AbstractOneResultSetHandle
      * @throws SQLException 数据库操作异常
      */
     protected Object createKey(ResultSet rs) throws SQLException {
-        //声明 result  K 值
-        Object result = null;
         //判断 当前对象 this.columName 是否为空
         if (this.columName == null|| columName.isEmpty()){
-            //为空则按 取值 行数 赋值给 K
-            result = rs.getObject(this.columIndex);
-        }else {
-            //不为空则按 取值 行名称 赋值给 K
-            result = rs.getObject(this.columName);
+            //为空则按 取值行数 返回 K 值
+            return rs.getObject(this.columIndex);
         }
-        //返回对象 K的值 result
-        return result;
+        //不为空则按 取值行名称 返回 K 值
+        return rs.getObject(this.columName);
     }
 
     /**
