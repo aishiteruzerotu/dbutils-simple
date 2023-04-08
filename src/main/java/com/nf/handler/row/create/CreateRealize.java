@@ -1,20 +1,20 @@
-package com.nf.handler.row.util;
+package com.nf.handler.row.create;
 
 import com.nf.ReflexException;
+import com.nf.handler.row.CreateRow;
+import com.nf.handler.row.create.BeanUtils;
+import com.nf.util.ResultSetMetaUtils;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
  * 该类用于生成对象
  */
-public class CreateUtils {
-    private CreateUtils() {
-    }
+public class CreateRealize implements CreateRow {
 
     /**
      * 根据结果集的数据，返回一个Object[]对象
@@ -22,7 +22,7 @@ public class CreateUtils {
      * @return Object[]对象
      * @throws SQLException
      */
-    public static Object[] createObjects(ResultSet rs) throws SQLException {
+    public Object[] createObjects(ResultSet rs) throws SQLException {
         //获取数据源
         ResultSetMetaData metaData = rs.getMetaData();
         //获取原数据的列的长度
@@ -44,7 +44,7 @@ public class CreateUtils {
      * @return @{Map<String,Object>} Map对象
      * @throws SQLException
      */
-    public static Map<String, Object> createMap(ResultSet rs) throws SQLException{
+    public Map<String, Object> createMap(ResultSet rs) throws SQLException{
         //声明一个 Map<String, Object> 对象
         Map<String, Object> result = new LinkedHashMap<>();
         //获取 ResultSetMetaData 源数据对象
@@ -53,19 +53,8 @@ public class CreateUtils {
         int columnCount = metaData.getColumnCount();
         //根据列的长度，从下标 1 开始循环
         for (int i = 1; i <= columnCount; i++) {
-            //获取别名 getColumnLabel
-            //声明 columnName 接收 得到的别名
-            String columnName = metaData.getColumnLabel(i);
-            //判断 columnName 是否为空
-            if (columnName==null||columnName.isEmpty()){
-                //为空则 获取列名
-                columnName = metaData.getColumnName(i);
-            }
-            //判断 columnName 是否为空
-            if (columnName==null|| columnName.isEmpty()){
-                //为空则获取改行的行号
-                columnName=Integer.toString(i);
-            }
+            //声明 columnName , 调用工具类 ResultSetMetaUtils 的 方法 getColumnName 得到列名
+            String columnName = ResultSetMetaUtils.getColumnName(metaData,i);
             //给map对象赋值
             result.put(columnName,rs.getObject(i));
         }
@@ -79,7 +68,7 @@ public class CreateUtils {
      * @param <T>
      * @return
      */
-    public static <T> T createBean(ResultSet rs,Class<? extends T> type) {
+    public <T> T createBean(ResultSet rs,Class<? extends T> type) {
         //声明对象
         T result = null;
         try {
@@ -87,7 +76,7 @@ public class CreateUtils {
             result = type.getDeclaredConstructor().newInstance();
         }catch (Exception e){
             //抛出异常
-            throw new ReflexException("fail to create bean...",e);
+            throw new ReflexException("fail to create bean,Default constructor is null...",e);
         }
         //调用填充方法，返回一个有数据的 bean 对象
         return BeanUtils.populateBean(rs,result);

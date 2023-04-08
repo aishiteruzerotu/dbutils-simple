@@ -1,21 +1,17 @@
 package com.nf.handler.row;
 
 import com.nf.handler.AllRowProcessor;
-import com.nf.handler.RowProcessor;
-import com.nf.handler.row.util.CreateUtils;
 
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
  * 该类实现了 AllRowProcessor 接口的方法
  */
-public class AllRowProcessorRealize implements AllRowProcessor {
+public class AllRowProcessorRealize extends AbstractProcessorRealize implements AllRowProcessor {
 
     /**
      * 返回一个 @{List<Object[]>} 数组对象
@@ -30,8 +26,8 @@ public class AllRowProcessorRealize implements AllRowProcessor {
         //循环取值
         while (rs.next()){
             //增加数据
-            //CreateUtils.createObjects 方法生成添加数据
-            result.add(CreateUtils.createObjects(rs));
+            // 依赖 的 .createObjects 方法生成添加数据
+            result.add(this.createRow.createObjects(rs));
         }
         //返回 List<Object[]> 列表对象
         return result;
@@ -52,8 +48,8 @@ public class AllRowProcessorRealize implements AllRowProcessor {
         List<T> result = new ArrayList<>();
         while (rs.next()){
             //增加数据
-            //CreateUtils.createBean 方法生成添加数据
-            result.add(CreateUtils.createBean(rs,type));
+            // 依赖 的 .createBean 方法生成添加数据
+            result.add(this.createRow.createBean(rs,type));
         }
         //返回 List<T> 列表对象
         return result;
@@ -72,8 +68,8 @@ public class AllRowProcessorRealize implements AllRowProcessor {
         //循环取值
         while (rs.next()){
             //增加数据
-            //CreateUtils.createMap 方法生成添加数据
-            result.add(CreateUtils.createMap(rs));
+            // 依赖 的 .createMap 方法生成添加数据
+            result.add(this.createRow.createMap(rs));
         }
         //返回 List<Map<String, Object>> 列表对象
         return result;
