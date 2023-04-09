@@ -2,7 +2,7 @@ package com.nf.handler.row.create;
 
 import com.nf.ReflexException;
 import com.nf.handler.row.CreateRow;
-import com.nf.handler.row.create.BeanUtils;
+import com.nf.handler.row.FillBean;
 import com.nf.util.ResultSetMetaUtils;
 
 import java.sql.ResultSet;
@@ -15,6 +15,25 @@ import java.util.Map;
  * 该类用于生成对象
  */
 public class CreateRealize implements CreateRow {
+    //填充依赖对象
+    protected FillBean fillBean;
+    //填充默认依赖对象
+    protected static final FillBean DEFAULT_FILL_BEAN = new FillBeanRealize();
+
+    /**
+     * 默认构造器
+     */
+    public CreateRealize() {
+        this(DEFAULT_FILL_BEAN);
+    }
+
+    /**
+     * 设置填充对象
+     * @param fillBean 填充Bean对象
+     */
+    public CreateRealize(FillBean fillBean) {
+        this.fillBean = fillBean;
+    }
 
     /**
      * 根据结果集的数据，返回一个Object[]对象
@@ -46,7 +65,7 @@ public class CreateRealize implements CreateRow {
      */
     public Map<String, Object> createMap(ResultSet rs) throws SQLException{
         //声明一个 Map<String, Object> 对象
-        Map<String, Object> result = new LinkedHashMap<>();
+        Map<String, Object> result = this.newMap();
         //获取 ResultSetMetaData 源数据对象
         ResultSetMetaData metaData = rs.getMetaData();
         //获取列的长度
@@ -69,6 +88,28 @@ public class CreateRealize implements CreateRow {
      * @return
      */
     public <T> T createBean(ResultSet rs,Class<? extends T> type) {
+        //调用自身 newInstance 方法生成对象
+        T result = this.newInstance(type);
+        //调用依赖填充方法，返回一个有数据的 bean 对象
+        return this.fillBean.populateBean(rs,result);
+    }
+
+    /**
+     * 生成Map对象
+     * @return Map对象
+     */
+    protected LinkedHashMap<String, Object> newMap() {
+        //返回 LinkedHashMap<>()
+        return new LinkedHashMap<>();
+    }
+
+    /**
+     * 生成对象的方法，用于给之类重写
+     * @param type 类数据
+     * @param <T> 泛型
+     * @return 生成对象
+     */
+    protected  <T> T newInstance(Class<? extends T> type) {
         //声明对象
         T result = null;
         try {
@@ -78,7 +119,8 @@ public class CreateRealize implements CreateRow {
             //抛出异常
             throw new ReflexException("fail to create bean,Default constructor is null...",e);
         }
-        //调用填充方法，返回一个有数据的 bean 对象
-        return BeanUtils.populateBean(rs,result);
+        //返回生成的对象
+        return result;
     }
+
 }

@@ -7,14 +7,15 @@ public abstract class AbstractAllResultSetHandler<T> implements ResultSetHandler
     //添加依赖对象 AllRowProcessor
     protected AllRowProcessor processor;
     //默认依赖
-    protected static final AllRowProcessor DEFAULTPROCESSOR = new AllRowProcessorRealize();
+    protected static final AllRowProcessor DEFAULT_PROCESSOR = new AllRowProcessorRealize();
 
     /**
      * 无参构造函数
+     *
      */
     public AbstractAllResultSetHandler() {
         //设置默认依赖
-        this(DEFAULTPROCESSOR);
+        this(DEFAULT_PROCESSOR);
     }
 
     /**

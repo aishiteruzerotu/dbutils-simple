@@ -7,14 +7,14 @@ public abstract class AbstractOneResultSetHandler<T> implements ResultSetHandler
     //添加依赖对象 RowProcessor
     protected RowProcessor processor;
     //默认依赖
-    protected static final RowProcessor DEFAULTPROCESSOR = new RowProcessorRealize();
+    protected static final RowProcessor DEFAULT_PROCESSOR = new RowProcessorRealize();
 
     /**
      * 无参构造函数
      */
     public AbstractOneResultSetHandler() {
         //设置默认依赖
-        this(DEFAULTPROCESSOR);
+        this(DEFAULT_PROCESSOR);
     }
 
     /**

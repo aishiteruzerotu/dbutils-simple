@@ -20,7 +20,7 @@ public class BeanListHandler<T> extends AbstractAllResultSetHandler<List<T>> {
      */
     public BeanListHandler(Class<? extends T> type) {
         //设置默认对象
-        this(type,DEFAULTPROCESSOR);
+        this(type,DEFAULT_PROCESSOR);
     }
 
     /**

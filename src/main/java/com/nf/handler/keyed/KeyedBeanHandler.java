@@ -21,7 +21,7 @@ public class KeyedBeanHandler<T> extends AbstractKeyedHandler<T> {
      * @param type 类对象数据
      */
     public KeyedBeanHandler(Class<? extends T> type) {
-        this(type,COLUMINDEXDEFAULTVALUE,COLUMNAMEDEFAULTVALUE,DEFAULTPROCESSOR);
+        this(type,COLUMINDEXDEFAULTVALUE,COLUMNAMEDEFAULTVALUE, DEFAULT_PROCESSOR);
     }
 
     /**
@@ -30,7 +30,7 @@ public class KeyedBeanHandler<T> extends AbstractKeyedHandler<T> {
      * @param columIndex K 值取值的行数
      */
     public KeyedBeanHandler(Class<? extends T> type, Integer columIndex) {
-        this(type,columIndex,COLUMNAMEDEFAULTVALUE,DEFAULTPROCESSOR);
+        this(type,columIndex,COLUMNAMEDEFAULTVALUE, DEFAULT_PROCESSOR);
     }
 
     /**
@@ -39,7 +39,7 @@ public class KeyedBeanHandler<T> extends AbstractKeyedHandler<T> {
      * @param columName K 值取值的名称，有名称时，按名称取值，无名称时，按行数取值，行数默认值为 1
      */
     public KeyedBeanHandler(Class<? extends T> type, String columName) {
-        this(type,COLUMINDEXDEFAULTVALUE,columName,DEFAULTPROCESSOR);
+        this(type,COLUMINDEXDEFAULTVALUE,columName, DEFAULT_PROCESSOR);
     }
 
     /**

@@ -18,7 +18,7 @@ public class BeanHandler<T> extends AbstractOneResultSetHandler<T> {
      */
     public BeanHandler(Class<? extends T> type) {
         //设置默认对象
-        this(type,DEFAULTPROCESSOR);
+        this(type, DEFAULT_PROCESSOR);
     }
 
     /**

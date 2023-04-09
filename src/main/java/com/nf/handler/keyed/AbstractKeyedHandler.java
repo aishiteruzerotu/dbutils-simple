@@ -32,7 +32,7 @@ public abstract class AbstractKeyedHandler<V> extends AbstractOneResultSetHandle
      * 默认取第一行作为 K 值
      */
     public AbstractKeyedHandler() {
-        this(COLUMINDEXDEFAULTVALUE,COLUMNAMEDEFAULTVALUE,DEFAULTPROCESSOR);
+        this(COLUMINDEXDEFAULTVALUE,COLUMNAMEDEFAULTVALUE, DEFAULT_PROCESSOR);
     }
 
     /**
@@ -48,7 +48,7 @@ public abstract class AbstractKeyedHandler<V> extends AbstractOneResultSetHandle
      * @param columName 取 K 值行名称
      */
     public AbstractKeyedHandler( String columName) {
-        this(COLUMINDEXDEFAULTVALUE,columName,DEFAULTPROCESSOR);
+        this(COLUMINDEXDEFAULTVALUE,columName, DEFAULT_PROCESSOR);
     }
 
     /**
