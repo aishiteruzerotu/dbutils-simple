@@ -15,9 +15,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.sql.SQLException;
+import java.util.*;
 
 /**
  * 该类用于bean的数据填充
@@ -28,6 +27,21 @@ public class FillBeanRealize implements FillBean {
     protected Map<String,String> propertyOverrides;
     //默认忽略值
     protected static final int  DEFAULT_NO_MAPPING_VALUE = -1;
+    //声明 PropertyHandler 实现类列表
+    protected static final List<PropertyHandler> propertyHandlers = new ArrayList<>();
+
+    static {
+        //spi技术实现实现类的加载
+        //加载 PropertyHandler 实现类
+        ServiceLoader<PropertyHandler> showControllers = ServiceLoader.load(PropertyHandler.class);
+        //获取迭代器
+        Iterator<PropertyHandler> iterator = showControllers.iterator();
+        //判断是否有数据
+        while (iterator.hasNext()) {
+            //添加数据
+            propertyHandlers.add(iterator.next());
+        }
+    }
 
     /**
      * 默认构造函数
@@ -196,16 +210,28 @@ public class FillBeanRealize implements FillBean {
     protected <T> void callSetter(T bean, Object value, PropertyDescriptor pd){
         //获取 set 方法
         Method setter = pd.getWriteMethod();
+        //判断set方法是否为空，以及set方法是否规范
+        if (setter==null&&setter.getParameterCount()!=1){
+            //不规范的set方法，不执行任何操作
+            return;
+        }
         try {
-            //判断set方法是否为空，以及set方法是否规范
-            if (setter!=null&&setter.getParameterCount()==1){
-                //执行方法
-                setter.invoke(bean,value);
-            }else {
-                //抛出无 set 方法异常
-                throw new ReflexException("setter in null...");
+            //获取参数属性
+            Class<?> typeParameter = setter.getParameters()[0].getType();
+            //循环 PropertyHandler 实现类
+            for (PropertyHandler propertyHandler : propertyHandlers) {
+                //判断数据是否能呗 PropertyHandler 的实现类处理
+                if (propertyHandler.mate(typeParameter,value)) {
+                    //出来后返回结果
+                    value=propertyHandler.apply(typeParameter,value);
+                    //数据已经处理了，可以直接跳出循环
+                    break;
+                }
             }
+            //运行setter方法
+            setter.invoke(bean,value);
         } catch (Exception e) {
+            //抛出无法填充数据的异常
             throw new ReflexException("data filling failed,setter in null...",e);
         }
     }
