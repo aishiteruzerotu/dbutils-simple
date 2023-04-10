@@ -198,7 +198,7 @@ public class FillBeanRealize implements FillBean {
         Method setter = pd.getWriteMethod();
         try {
             //判断set方法是否为空，以及set方法是否规范
-            if (setter==null&&setter.getParameterCount()!=1){
+            if (setter!=null&&setter.getParameterCount()!=1){
                 //执行方法
                 setter.invoke(bean,value);
             }else {
