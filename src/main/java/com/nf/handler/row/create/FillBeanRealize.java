@@ -246,9 +246,8 @@ public class FillBeanRealize implements FillBean {
         BeanInfo beanInfo = null;
         try {
             //通过 Introspector 的 getBeanInfo 方法回去 BeanInfo 对象
-            //该方法用于得到一个 有 bean 类对象字段组成， BeanInfo 对象
-            //其 BeanInfo 对象，会自动生成 getter setter 访问器，以及一个public的无参数构造器
-            //使得 Bean 类可以序列化
+            //该方法用于解析 bean 对象，该对象需要包含其字段的 getter 或 setter方法
+            //否则不会有该字段的 PropertyDescriptor 属性信息
             beanInfo = Introspector.getBeanInfo(clz);
         } catch (IntrospectionException e) {
             //抛出创建 BeanInfo 异常
