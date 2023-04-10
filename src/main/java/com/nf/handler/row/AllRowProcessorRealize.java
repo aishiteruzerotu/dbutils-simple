@@ -1,6 +1,7 @@
 package com.nf.handler.row;
 
 import com.nf.handler.AllRowProcessor;
+import com.nf.handler.RowProcessor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,6 +13,21 @@ import java.util.Map;
  * 该类实现了 AllRowProcessor 接口的方法
  */
 public class AllRowProcessorRealize extends AbstractProcessorRealize implements AllRowProcessor {
+
+    /**
+     * 默认构造器
+     */
+    public AllRowProcessorRealize() {
+        this(DEFAULT_CREATE_ROW);
+    }
+
+    /**
+     * 设置依赖构造器
+     * @param createRow 依赖
+     */
+    public AllRowProcessorRealize(CreateRow createRow) {
+        this.createRow = createRow;
+    }
 
     /**
      * 返回一个 @{List<Object[]>} 数组对象

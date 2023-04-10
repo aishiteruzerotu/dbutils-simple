@@ -12,6 +12,21 @@ import java.util.*;
 public class RowProcessorRealize extends AbstractProcessorRealize implements RowProcessor {
 
     /**
+     * 默认构造器
+     */
+    public RowProcessorRealize() {
+        this(DEFAULT_CREATE_ROW);
+    }
+
+    /**
+     * 设置依赖构造器
+     * @param createRow 依赖
+     */
+    public RowProcessorRealize(CreateRow createRow) {
+        this.createRow = createRow;
+    }
+
+    /**
      * 返回一个 Object[] 数组对象
      * @param rs 结果集
      * @return Object[]对象
