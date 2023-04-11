@@ -4,13 +4,17 @@
 
 #	2、创建SqlExecutor执行工具
 
-主要完成两个方法
+##	主要完成两个方法
 
 1. int update	增删改操作  返回被修改的行
 2. T query		 查询操作	 返回一个泛型对象 T
-3. int insertObject 通过对象增加一行对应的数据 返回插入的行数
-4. T queryBean 查询操作     返回一个泛型对象 T //该方法只能返回一个实体类
-5. List<T> queryBeanList   查询操作 返回泛型对象序列  //该方法只返回泛型对象序列
+3. T insert         增加一行数据后返回被一个自增长的值
+
+##	封装方法 SqlExecutorEx
+
+1. int insertObject 通过对象增加一行对应的数据 返回插入的行数
+2. T queryBean 查询操作     返回一个泛型对象 T //该方法只能返回一个实体类
+3. List<T> queryBeanList   查询操作 返回泛型对象序列  //该方法只返回泛型对象序列
 
 
 
@@ -56,11 +60,22 @@
 
 ​	BeanListHandler ：返回一个List序列的Bean合集对象
 
+#	5、FillBean类
 
+给Bean对象填充数据
 
+##	5.1 列名与字段的映射关系
 
+ int[] mapColumnToProperty 方法用于返回列名与字段的映射关系
 
+##	5.2 propertyOverrides字段的映射
 
+​	Map<String,String> 
 
+​	Map<String 数据库查询列名名称,String 字段名称>
 
+String getPropertyName 方法通过数据库查询名称获取对应映射的字段名称
 
+##	5.3 执行赋值
+
+​	callSetter 执行赋值操作，如果setter方法没有或不规范则无法执行
