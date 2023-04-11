@@ -209,4 +209,94 @@ public class SqlExecutor extends AbstractSqlExecutor {
         return result;
     }
 
+    /**
+     * 给数据库增加一行数据后，返回一个自增长的值
+     * @param sql       sql查询语句
+     * @param params    访问参数
+     * @return 自增长的值
+     */
+    public <T> T insert(final String sql, final ResultSetHandler<T> rsh, final Object... params){
+        //调用自身 insert 方法
+        return this.insert(this.prepareConnection(),true,sql,rsh,params);
+    }
+
+    /**
+     * 给数据库增加一行数据后，返回一个自增长的值
+     * @param conn      数据库连接
+     * @param sql       sql查询语句
+     * @param params    访问参数
+     * @return 自增长的值
+     */
+    public <T> T insert(final Connection conn, final String sql, final ResultSetHandler<T> rsh, final Object... params){
+        //调用自身 insert 方法
+        return this.insert(conn,false,sql,rsh,params);
+    }
+
+    /**
+     * 给数据库增加一行数据后，返回一个自增长的值
+     * @param conn      数据库连接
+     * @param closeConn 是否关闭数据库连接，输入 true 值关闭数据库连接，false 则不关闭
+     * @param sql       sql查询语句
+     * @param params    访问参数
+     * @return 自增长的值
+     */
+    protected <T> T insert(final Connection conn, final boolean closeConn, final String sql, final ResultSetHandler<T> rsh, final Object... params){
+        try {
+            //调用自身 insert0 方法
+            return this.insert0(conn,closeConn,sql,rsh,params);
+        } catch (SQLException e) {
+            throw new DaoException("insert defeated...", e);
+        }
+    }
+
+    /**
+     * 给数据库增加一行数据后，返回一个自增长的值
+     * @param conn      数据库连接
+     * @param closeConn 是否关闭数据库连接，输入 true 值关闭数据库连接，false 则不关闭
+     * @param sql       sql查询语句
+     * @param params    访问参数
+     * @return 自增长的值
+     */
+    protected <T> T insert0(final Connection conn, final boolean closeConn, final String sql, final ResultSetHandler<T> rsh, final Object... params) throws SQLException {
+        //检查数据库连接是否为空
+        checkConnection(conn);
+        //检查sql语句是否为空
+        checkSql(conn, closeConn, sql);
+        //检查ResultSetHandler对象是否为空
+        checkResultSetHandler(conn, closeConn, rsh);
+
+        //声明PreparedStatement对象 statement 为空
+        PreparedStatement statement = null;
+        //声明返回结果集为空
+        ResultSet rs = null;
+        //声明返回的对象为空
+        T result = null;
+        try {
+            //从数据库连接中获取 PreparedStatement 对象 并赋值给 statement
+            statement = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+            //给执行器 statement 填入参数
+            statement = this.fillStatement(statement, params);
+            //使用statement执行器的.getGeneratedKeys() 查询方法，得到自增长的结果集
+            rs = statement.getGeneratedKeys();
+            //使用 ResultSetHandler 对象的 handler 方法，得到一个返回对象
+            result = rsh.handler(rs);
+        } catch (SQLException e) {
+            //抛出插入数据失败异常
+            throw new DaoException("insert defeated...", e);
+        } finally {
+            //关闭结果集
+            close(rs);
+            //关闭执行器 statement
+            close(statement);
+            //判断是否需要关闭连接
+            if (closeConn) {
+                //为真关闭连接
+                close(conn);
+            }
+
+        }
+        //返回对象 result
+        return result;
+    }
+
 }

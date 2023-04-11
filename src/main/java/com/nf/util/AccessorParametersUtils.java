@@ -90,24 +90,7 @@ public class AccessorParametersUtils {
                 throw new ReflexException("Failed to obtain object field value...",e);
             }
         }
-        //返回 objects
-        return copyObjects(objectList);
-    }
-
-    /**
-     * 根据 List 列表，生成对应的 Object数组
-     * @param list @{List<Object>} 列表
-     * @return Object数组
-     */
-    public static Object[] copyObjects(List<Object> list){
-        //声明 Object 数组
-        Object[] objects = new Object[list.size()];
-        //循环list赋值
-        for (int i = 0; i < objects.length; i++) {
-            //赋值
-            objects[i] = list.get(i);
-        }
-        //返回 Object 数组对象
-        return objects;
+        //返回一个 Object 数组
+        return objectList.toArray();
     }
 }
