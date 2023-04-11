@@ -1,11 +1,18 @@
 package com.nf.util;
 
 import com.nf.ReflexException;
+import com.nf.annotate.Auto;
 
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * 此类用于访问参数的设置，以及生成
@@ -54,32 +61,53 @@ public class AccessorParametersUtils {
             //实体类对象为空抛出异常
             throw new ReflexException("Entity Class is null...");
         }
-        //声明 Object 数组为空
-        Object[] objects = null;
-        //获取 对象 的类对象
-        Class<?> clz = t.getClass();
-        //获取对象声明的字段数组
-        Field[] fields = clz.getDeclaredFields();
-        //创建 Object 对象
-        objects = new Object[fields.length];
-        //循环给 Object 对象赋值
-        for (int i = 0; i < fields.length; i++) {
-            //声明 Field 对象
-            Field field = fields[i];
-            //设置访问属性为真
-            field.setAccessible(true);
+        //获取对象属性
+        PropertyDescriptor[] pds = JavaBeanUtils.getPropertyDescriptors(t.getClass());
+        //声明 objectList 列表
+        List<Object> objectList = new ArrayList<>();
+        //循环给 objectList 列表赋值
+        for (int i = 1; i < pds.length; i++) {
+            //声明 属性对象
+            PropertyDescriptor pd = pds[i];
+            //获取字段信息
+            Field field = JavaBeanUtils.getDeclaredField(t.getClass(),pds[i].getName());
+            //判断当前字段是否是自增长
+            if (field.isAnnotationPresent(Auto.class)) {
+                //是，结束此次循环
+                continue;
+            }
+            //获取 getter 方法
+            Method getter = pd.getReadMethod();
+            //判断 getter 方法是否为空，且方法格式正确
+            if(getter==null&&getter.getParameters().length!=0){
+                continue;
+            }
             try {
-                //给 objects 对象赋值
-                objects[i] = field.get(t);
-            } catch (IllegalAccessException e) {
+                //添加数据
+                objectList.add(getter.invoke(t));
+            } catch (Exception e) {
+                //抛出无法执行 getter 方法异常
                 throw new ReflexException("Failed to obtain object field value...",e);
-            }finally {
-                //设置访问属性为假
-                field.setAccessible(false);
             }
         }
         //返回 objects
-        return objects;
+        return copyObjects(objectList);
     }
 
+    /**
+     * 根据 List 列表，生成对应的 Object数组
+     * @param list @{List<Object>} 列表
+     * @return Object数组
+     */
+    public static Object[] copyObjects(List<Object> list){
+        //声明 Object 数组
+        Object[] objects = new Object[list.size()];
+        //循环list赋值
+        for (int i = 0; i < objects.length; i++) {
+            //赋值
+            objects[i] = list.get(i);
+        }
+        //返回 Object 数组对象
+        return objects;
+    }
 }

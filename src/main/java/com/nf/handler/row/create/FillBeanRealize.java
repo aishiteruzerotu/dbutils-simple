@@ -4,6 +4,7 @@ import com.nf.DaoException;
 import com.nf.ReflexException;
 import com.nf.annotate.ColumnName;
 import com.nf.handler.row.FillBean;
+import com.nf.util.JavaBeanUtils;
 import com.nf.util.ResultSetMetaUtils;
 
 import javax.swing.*;
@@ -155,7 +156,7 @@ public class FillBeanRealize implements FillBean {
                 //获取属性
                 PropertyDescriptor pd = pds[i];
                 //获取字段
-                Field field = clz.getDeclaredField(pd.getName());
+                Field field = JavaBeanUtils.getDeclaredField(clz,pds[i].getName());
                 //声明字段注解
                 ColumnName column;
                 //判断字段是否为空，以及该字段是否有 ColumnName 注解
@@ -242,18 +243,7 @@ public class FillBeanRealize implements FillBean {
      * @return bean 对象的属性数组
      */
     protected PropertyDescriptor[] propertyDescriptor(Class<?> clz){
-        //声明 BeanInfo 序列化 bean
-        BeanInfo beanInfo = null;
-        try {
-            //通过 Introspector 的 getBeanInfo 方法回去 BeanInfo 对象
-            //该方法用于解析 bean 对象，该对象需要包含其字段的 getter 或 setter方法
-            //否则不会有该字段的 PropertyDescriptor 属性信息
-            beanInfo = Introspector.getBeanInfo(clz);
-        } catch (IntrospectionException e) {
-            //抛出创建 BeanInfo 异常
-            throw new ReflexException("Create getter and setter failed...",e);
-        }
-        //返回属性数组
-        return beanInfo.getPropertyDescriptors();
+        //调用工具类 JavaBeanUtils 的 getPropertyDescriptors 获取对象属性
+        return JavaBeanUtils.getPropertyDescriptors(clz);
     }
 }

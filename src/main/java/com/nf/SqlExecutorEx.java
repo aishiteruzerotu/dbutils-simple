@@ -3,7 +3,6 @@ package com.nf;
 import com.nf.handler.BeanHandler;
 import com.nf.handler.BeanListHandler;
 import com.nf.util.AccessorParametersUtils;
-import com.nf.util.GenerateSQLUtils;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -14,12 +13,16 @@ import java.util.List;
  * 增加功能
  */
 public class SqlExecutorEx extends SqlExecutor{
+    //生成 sql 语句依赖对象
+    protected GenerateSQL generateSQL;
+    //默认生成 sql 语句依赖
+    protected static final GenerateSQL DEFAULT_GENERATE_SQL = new GenerateSQLRealize();
 
     /**
      * 默认构造器
      */
     public SqlExecutorEx() {
-        super();
+        this(null,DEFAULT_GENERATE_SQL);
     }
 
     /**
@@ -28,7 +31,17 @@ public class SqlExecutorEx extends SqlExecutor{
      * @param ds DataSource对象
      */
     public SqlExecutorEx(final DataSource ds) {
-        super(ds);
+        this(ds,DEFAULT_GENERATE_SQL);
+    }
+
+    /**
+     * 生成对象
+     * @param ds 连接池
+     * @param generateSQL 依赖对象
+     */
+    public SqlExecutorEx(final DataSource ds,final GenerateSQL generateSQL){
+        this.ds = ds;
+        this.generateSQL = generateSQL;
     }
 
     /**
@@ -42,7 +55,7 @@ public class SqlExecutorEx extends SqlExecutor{
         //获取连接
         Connection conn = this.prepareConnection();
         //获取插入语句
-        String sql = GenerateSQLUtils.generateInsert(t);
+        String sql = this.generateSQL.generateInsert(t);
         //调用自身 insertObject 方法
         return this.insertObject(conn, true, sql, t);
     }
@@ -72,7 +85,7 @@ public class SqlExecutorEx extends SqlExecutor{
      */
     public <T> int insertObject(final Connection conn, T t) {
         //获取插入语句
-        String sql = GenerateSQLUtils.generateInsert(t);
+        String sql = this.generateSQL.generateInsert(t);
         //调用自身 insertObject 方法
         return this.insertObject(conn, false, sql, t);
     }
@@ -120,7 +133,7 @@ public class SqlExecutorEx extends SqlExecutor{
         //获取连接
         Connection conn = this.prepareConnection();
         //获取查询字段
-        String sql = GenerateSQLUtils.generateSelect(clz);
+        String sql = this.generateSQL.generateSelect(clz);
         //调用自身 queryBean 方法
         return this.queryBean(conn, true, sql, clz, params);
     }
@@ -152,7 +165,7 @@ public class SqlExecutorEx extends SqlExecutor{
      */
     public <T> T queryBean(final Connection conn, final Class<? extends T> clz, final Object... params) {
         //获取查询字段
-        String sql = GenerateSQLUtils.generateSelect(clz);
+        String sql = this.generateSQL.generateSelect(clz);
         //调用自身 queryBean 方法
         return this.queryBean(conn, false, sql, clz, params);
     }
@@ -202,7 +215,7 @@ public class SqlExecutorEx extends SqlExecutor{
         //获取连接
         Connection conn = this.prepareConnection();
         //获取查询字段
-        String sql = GenerateSQLUtils.generateSelect(clz);
+        String sql = this.generateSQL.generateSelect(clz);
         //调用自身 queryBeanList 方法
         return this.queryBeanList(conn, true, sql, clz, params);
     }
@@ -234,7 +247,7 @@ public class SqlExecutorEx extends SqlExecutor{
      */
     public <T> List<T> queryBeanList(final Connection conn, Class<? extends T> clz, final Object... params) {
         //获取查询字段
-        String sql = GenerateSQLUtils.generateSelect(clz);
+        String sql = this.generateSQL.generateSelect(clz);
         //调用自身 queryBeanList 方法
         return this.queryBeanList(conn, false, sql, clz, params);
     }
@@ -286,7 +299,7 @@ public class SqlExecutorEx extends SqlExecutor{
         //获取连接
         Connection conn = this.prepareConnection();
         //生成 sql 删除语句
-        String sql = GenerateSQLUtils.generateDelete(clz);
+        String sql = this.generateSQL.generateDelete(clz);
         //调用自身 delete 方法
         return this.delete(conn, true, sql, primaryKey);
     }
@@ -304,7 +317,7 @@ public class SqlExecutorEx extends SqlExecutor{
      */
     public int delete(final Connection conn, final Class<?> clz, Object primaryKey) {
         //生成 sql 删除语句
-        String sql = GenerateSQLUtils.generateDelete(clz);
+        String sql = this.generateSQL.generateDelete(clz);
         //调用自身 delete 方法
         return this.delete(conn, false, sql, primaryKey);
     }
