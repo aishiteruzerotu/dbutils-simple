@@ -36,6 +36,14 @@ public abstract class AbstractSqlExecutor {
     }
 
     /**
+     * 设置 DataSource 对象
+     * @param ds DataSource 对象
+     */
+    public void setDs(DataSource ds) {
+        this.ds = ds;
+    }
+
+    /**
      * 该方法用于获取数据库的连接
      * 该方法在需要被扩展时，可以被子类重载
      * @return 一个数据库连接 Connection 对象

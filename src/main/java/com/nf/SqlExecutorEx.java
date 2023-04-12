@@ -26,6 +26,14 @@ public class SqlExecutorEx extends SqlExecutor{
     }
 
     /**
+     * 设置 sql 语句生成依赖
+     * @param generateSQL 依赖对象
+     */
+    public SqlExecutorEx(GenerateSQL generateSQL) {
+        this.generateSQL = generateSQL;
+    }
+
+    /**
      * 创建对象
      *
      * @param ds DataSource对象

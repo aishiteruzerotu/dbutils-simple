@@ -1,5 +1,8 @@
 package com.nf.handler.keyed;
 
+import com.nf.handler.RowProcessor;
+import com.nf.handler.row.RowProcessorRealize;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
@@ -12,6 +15,60 @@ import java.util.Map;
  * 由此，该返回的 Map 对象，一条数据包含了数据库查询的一条数据
  */
 public class KeyedMapHandler<V> extends AbstractKeyedHandler<Map<String, Object>> {
+    /**
+     * 默认构造函数
+     * 默认取第一行作为 K 值
+     */
+    public KeyedMapHandler() {
+        this(COLUMINDEXDEFAULTVALUE,COLUMNAMEDEFAULTVALUE, DEFAULT_PROCESSOR);
+    }
+
+    /**
+     * 赋值取 K 值行数
+     * @param columIndex 取 K 值行数
+     */
+    public KeyedMapHandler(Integer columIndex) {
+        this(columIndex,COLUMNAMEDEFAULTVALUE,new RowProcessorRealize());
+    }
+
+    /**
+     * 赋值取 K 值行名称
+     * @param columName 取 K 值行名称
+     */
+    public KeyedMapHandler( String columName) {
+        this(COLUMINDEXDEFAULTVALUE,columName, DEFAULT_PROCESSOR);
+    }
+
+    /**
+     * 设置依赖对象
+     * 赋值取 K 值行数
+     * @param columIndex 取 K 值行数
+     */
+    public KeyedMapHandler(Integer columIndex, RowProcessor processor) {
+        this(columIndex,COLUMNAMEDEFAULTVALUE,processor);
+    }
+
+    /**
+     * 设置依赖对象
+     * 赋值取 K 值行名称
+     * @param columName 取 K 值行名称
+     */
+    public KeyedMapHandler(String columName,RowProcessor processor) {
+        this(COLUMINDEXDEFAULTVALUE,columName,processor);
+    }
+
+    /**
+     * 行数和列名称不应该同时赋值
+     * @param columIndex 行数
+     * @param columName 行名称
+     * @param processor 实现类对象
+     */
+    protected KeyedMapHandler( Integer columIndex, String columName,RowProcessor processor) {
+        this.processor = processor;
+        this.columIndex = columIndex;
+        this.columName = columName;
+    }
+
 
     /**
      * 该方法返回值是一个 Map<String, Object> 的 Map 对象

@@ -53,7 +53,7 @@ public class FillBeanRealize implements FillBean {
 
     /**
      * 设置数据库查询数据与字段映射关系
-     * @param propertyOverrides
+     * @param propertyOverrides 查询数据与字段映射
      */
     public FillBeanRealize(Map<String, String> propertyOverrides) {
         //判断映射关系是否为空
