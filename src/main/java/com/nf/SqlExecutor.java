@@ -276,6 +276,8 @@ public class SqlExecutor extends AbstractSqlExecutor {
             statement = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
             //给执行器 statement 填入参数
             statement = this.fillStatement(statement, params);
+            //对数据库进行更新操作
+            statement.executeUpdate();
             //使用statement执行器的.getGeneratedKeys() 查询方法，得到自增长的结果集
             rs = statement.getGeneratedKeys();
             //使用 ResultSetHandler 对象的 handler 方法，得到一个返回对象
