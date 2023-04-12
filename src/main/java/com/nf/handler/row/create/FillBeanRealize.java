@@ -156,27 +156,15 @@ public class FillBeanRealize implements FillBean {
                 //获取属性
                 PropertyDescriptor pd = pds[i];
                 //获取字段
-                Field field = JavaBeanUtils.getDeclaredField(clz,pds[i].getName());
-                //声明字段注解
-                ColumnName column;
+                Field field = JavaBeanUtils.getDeclaredField(clz,pd.getName());
+                //声明字段的映射名称 先获取到字段属性的名称
+                String propertyColumnName = pd.getName();
                 //判断字段是否为空，以及该字段是否有 ColumnName 注解
                 if (field!=null && field.isAnnotationPresent(ColumnName.class)){
-                    //为真获取注解
-                    column = field.getAnnotation(ColumnName.class);
-                }else {
-                    //为假赋 null 值
-                    column =null;
-                }
-                //声明字段的映射名称
-                String propertyColumnName;
-                //判断注解是否为空
-                if (column!=null){
                     //注解不为空，按注解值赋值给 字段的映射名称
-                    propertyColumnName = column.value();
-                }else {
-                    //注解为空则 按字段本身名称赋值给 字段的映射名称
-                    propertyColumnName = pd.getName();
-                }
+                    propertyColumnName = field.getAnnotation(ColumnName.class).value();
+                }//注解为空则 不需要重新赋新值，会按原先声明时候赋的值进行映射关系的匹配
+                //需要注意的是 当前的映射关系的写法主要是按注解进行匹配，注解的优先级要高于 Map 对象的映射逻辑
                 //不区分大小写判断 数据库行的映射名称 与 字段的映射名称 是否相同
                 if (propertyName.equalsIgnoreCase(propertyColumnName)){
                     //相同记录映射关系
