@@ -66,11 +66,16 @@ public class AccessorParametersUtils {
         //声明 objectList 列表
         List<Object> objectList = new ArrayList<>();
         //循环给 objectList 列表赋值
-        for (int i = 1; i < pds.length; i++) {
+        for (int i = 0; i < pds.length; i++) {
             //声明 属性对象
             PropertyDescriptor pd = pds[i];
             //获取字段信息
             Field field = JavaBeanUtils.getDeclaredField(t.getClass(),pds[i].getName());
+            //判断获取的字段是否为空
+            if (field==null) {
+                //获取的字段为空跳出循环
+                continue;
+            }
             //判断当前字段是否是自增长
             if (field.isAnnotationPresent(Auto.class)) {
                 //是，结束此次循环

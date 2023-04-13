@@ -151,8 +151,8 @@ public class FillBeanRealize implements FillBean {
             //调用映射规则 getPropertyName 方法 获取数据库行的映射名称
             String propertyName = this.getPropertyName(columnName);
 
-            //循环属性 属性有 class 这个默认字段，循环时跳过该字段
-            for (int i = 1; i < pds.length; i++) {
+            //循环属性
+            for (int i = 0; i < pds.length; i++) {
                 //获取属性
                 PropertyDescriptor pd = pds[i];
                 //获取字段
@@ -232,6 +232,6 @@ public class FillBeanRealize implements FillBean {
      */
     protected PropertyDescriptor[] propertyDescriptor(Class<?> clz){
         //调用工具类 JavaBeanUtils 的 getPropertyDescriptors 获取对象属性
-        return JavaBeanUtils.getPropertyDescriptors(clz);
+        return  JavaBeanUtils.getPropertyDescriptors(clz);
     }
 }

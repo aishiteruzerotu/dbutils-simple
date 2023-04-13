@@ -11,6 +11,8 @@ import java.lang.reflect.Field;
 
 /**
  * 此类用于生成SQl语句，返回对象皆为字符串
+ * 该类生成的 Sql 语句是根据类的字段与属性匹配的名称赋值的，
+ * 如果没有相应的属性或是字段，则不会生成这个 操作的列名称
  * 是访问器相关的工具类
  */
 public class GenerateSQLRealize implements GenerateSQL{
@@ -39,6 +41,11 @@ public class GenerateSQLRealize implements GenerateSQL{
         for (int i = 1; i < pds.length; i++) {
             //获取字信息
             Field field = JavaBeanUtils.getDeclaredField(clz,pds[i].getName());
+            //判断获取的字段是否为空
+            if (field==null) {
+                //获取的字段为空跳出循环
+                continue;
+            }
             //判断当前字段是否是自增长
             if (field.isAnnotationPresent(Auto.class)) {
                 //是，结束此次循环
@@ -54,7 +61,13 @@ public class GenerateSQLRealize implements GenerateSQL{
             }
         }
         for (int i = 1; i < pds.length; i++) {
+            //获取字段
             Field field = JavaBeanUtils.getDeclaredField(clz,pds[i].getName());
+            //判断获取的字段是否为空
+            if (field==null) {
+                //获取的字段为空跳出循环
+                continue;
+            }
             //判断当前字段是否是自增长
             if (field.isAnnotationPresent(Auto.class)) {
                 //是，结束此次循环
@@ -121,18 +134,23 @@ public class GenerateSQLRealize implements GenerateSQL{
         sql.append(this.getTableName(clz));
         //添加 where
         sql.append(" where ");
-        //获取类对象字段
-        Field[] fields = clz.getDeclaredFields();
+        //获取属性
+        PropertyDescriptor[] pds = JavaBeanUtils.getPropertyDescriptors(clz);
         //声明 主键
         String isPrimaryKey = null;
         //循环字段
-        for (Field field : fields) {
+        for (int i = 0; i < pds.length; i++) {
+            //获取字段信息
+            Field field = JavaBeanUtils.getDeclaredField(clz,pds[i].getName());
+            //判断获取的字段是否为空
+            if (field==null) {
+                //获取的字段为空跳出循环
+                continue;
+            }
             //判断该字段是否为设定主键
             if (field.isAnnotationPresent(PrimaryKey.class)) {
                 //调用自身 getColumnName 获取列名
                 isPrimaryKey = this.getColumnName(field);
-                //跳出循环
-                break;
             }
         }
         //判断是否有给 主键设置
