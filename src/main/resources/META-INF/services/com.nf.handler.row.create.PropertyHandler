@@ -1,2 +1,3 @@
 com.nf.handler.row.create.propertys.DatePropertyHandler
 com.nf.handler.row.create.propertys.EnumPropertyHandler
+com.nf.handler.row.create.propertys.SimpleTypePropertyHandler

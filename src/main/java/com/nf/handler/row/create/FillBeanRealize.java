@@ -206,7 +206,7 @@ public class FillBeanRealize implements FillBean {
         }
         try {
             //获取参数属性
-            Class<?> typeParameter = setter.getParameters()[0].getType();
+            Class<?> typeParameter = pd.getPropertyType();
             //循环 PropertyHandler 实现类
             for (PropertyHandler propertyHandler : propertyHandlers) {
                 //判断数据是否能呗 PropertyHandler 的实现类处理
@@ -217,6 +217,7 @@ public class FillBeanRealize implements FillBean {
                     break;
                 }
             }
+
             //运行setter方法
             setter.invoke(bean,value);
         } catch (Exception e) {
