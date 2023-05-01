@@ -91,4 +91,22 @@ public interface Query {
      * @return @{List<T>} 实体类列表对象
      */
     <T> List<T> queryBeanList(final Connection conn, final String sql, Class<? extends T> clz, final Object... params);
+
+    /**
+     * 对数据执行查询操作，返回一个 用户定义的对象
+     *
+     * @param sql    sql查询语句
+     * @param params 访问参数
+     * @return 一个对象
+     */
+    <T> T query(final String sql, final ResultSetHandler<T> rsh, final Object... params);
+
+    /**
+     * 对数据执行查询操作，返回一个 用户定义的对象
+     *
+     * @param sql    sql查询语句
+     * @param params 访问参数
+     * @return 一个对象
+     */
+    <T> T query(final Connection conn, final String sql, final ResultSetHandler<T> rsh, final Object... params);
 }

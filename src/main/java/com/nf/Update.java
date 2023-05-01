@@ -70,4 +70,23 @@ public interface Update {
      * @return 数据库被影响的行数
      */
     int delete(final Connection conn, final Class<?> clz, Object primaryKey);
+
+    /**
+     * 对数据库进行更新操作，并返回一个被修改的行数
+     *
+     * @param sql    sql更新语句
+     * @param params 访问参数
+     * @return 被影响的行数
+     */
+    int update(final String sql, final Object... params);
+
+    /**
+     * 对数据库进行更新操作，并返回一个被修改的行数
+     *
+     * @param conn   数据库连接
+     * @param sql    sql更新语句
+     * @param params 访问参数
+     * @return 被影响的行数
+     */
+    int update(final Connection conn, final String sql, final Object... params);
 }
