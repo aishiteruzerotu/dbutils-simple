@@ -4,245 +4,245 @@ import javax.sql.DataSource;
 import java.sql.*;
 
 /**
- * è¯¥ç±»ç”¨äºæ•°æ®åº“æ“ä½œ
- * æ˜¯æ•°æ®åº“æ“ä½œå·¥å…·ç±»
+ * ¸ÃÀàÓÃÓÚÊı¾İ¿â²Ù×÷
+ * ÊÇÊı¾İ¿â²Ù×÷¹¤¾ßÀà
  */
 public class SqlExecutor extends AbstractSqlExecutor {
 
     /**
-     * é»˜è®¤æ„é€ å™¨
+     * Ä¬ÈÏ¹¹ÔìÆ÷
      */
     public SqlExecutor() {
         super();
     }
 
     /**
-     * åˆ›å»ºå¯¹è±¡
+     * ´´½¨¶ÔÏó
      *
-     * @param ds DataSourceå¯¹è±¡
+     * @param ds DataSource¶ÔÏó
      */
     public SqlExecutor(final DataSource ds) {
         super(ds);
     }
 
     /**
-     * å¯¹æ•°æ®åº“è¿›è¡Œæ›´æ–°æ“ä½œï¼Œå¹¶è¿”å›ä¸€ä¸ªè¢«ä¿®æ”¹çš„è¡Œæ•°
+     * ¶ÔÊı¾İ¿â½øĞĞ¸üĞÂ²Ù×÷£¬²¢·µ»ØÒ»¸ö±»ĞŞ¸ÄµÄĞĞÊı
      *
-     * @param sql    sqlæ›´æ–°è¯­å¥
-     * @param params è®¿é—®å‚æ•°
-     * @return è¢«å½±å“çš„è¡Œæ•°
+     * @param sql    sql¸üĞÂÓï¾ä
+     * @param params ·ÃÎÊ²ÎÊı
+     * @return ±»Ó°ÏìµÄĞĞÊı
      */
     public int update(final String sql, final Object... params) {
-        //å£°æ˜ä¸€ä¸ªæ•°æ®åº“è¿æ¥ Connection å¯¹è±¡ï¼Œè°ƒç”¨è‡ªèº«æ–¹æ³•ä¸ºå…¶èµ‹å€¼
+        //ÉùÃ÷Ò»¸öÊı¾İ¿âÁ¬½Ó Connection ¶ÔÏó£¬µ÷ÓÃ×ÔÉí·½·¨ÎªÆä¸³Öµ
         Connection conn = this.prepareConnection();
-        //è°ƒç”¨è‡ªèº«çš„ .update() æ–¹æ³•
+        //µ÷ÓÃ×ÔÉíµÄ .update() ·½·¨
         return this.update(conn, true, sql, params);
     }
 
     /**
-     * å¯¹æ•°æ®åº“è¿›è¡Œæ›´æ–°æ“ä½œï¼Œå¹¶è¿”å›ä¸€ä¸ªè¢«ä¿®æ”¹çš„è¡Œæ•°
+     * ¶ÔÊı¾İ¿â½øĞĞ¸üĞÂ²Ù×÷£¬²¢·µ»ØÒ»¸ö±»ĞŞ¸ÄµÄĞĞÊı
      *
-     * @param conn   æ•°æ®åº“è¿æ¥
-     * @param sql    sqlæ›´æ–°è¯­å¥
-     * @param params è®¿é—®å‚æ•°
-     * @return è¢«å½±å“çš„è¡Œæ•°
+     * @param conn   Êı¾İ¿âÁ¬½Ó
+     * @param sql    sql¸üĞÂÓï¾ä
+     * @param params ·ÃÎÊ²ÎÊı
+     * @return ±»Ó°ÏìµÄĞĞÊı
      */
     public int update(final Connection conn, final String sql, final Object... params) {
-        //è°ƒç”¨è‡ªèº«çš„ .update() æ–¹æ³•
+        //µ÷ÓÃ×ÔÉíµÄ .update() ·½·¨
         return this.update(conn, false, sql, params);
     }
 
     /**
-     * å¯¹æ•°æ®åº“è¿›è¡Œæ›´æ–°æ“ä½œï¼Œå¹¶è¿”å›ä¸€ä¸ªè¢«ä¿®æ”¹çš„è¡Œæ•°
+     * ¶ÔÊı¾İ¿â½øĞĞ¸üĞÂ²Ù×÷£¬²¢·µ»ØÒ»¸ö±»ĞŞ¸ÄµÄĞĞÊı
      *
-     * @param conn      æ•°æ®åº“è¿æ¥
-     * @param closeConn æ˜¯å¦å…³é—­æ•°æ®åº“è¿æ¥ï¼Œè¾“å…¥ true å€¼å…³é—­æ•°æ®åº“è¿æ¥ï¼Œfalse åˆ™ä¸å…³é—­
-     * @param sql       sqlæ›´æ–°è¯­å¥
-     * @param params    è®¿é—®å‚æ•°
-     * @return è¢«å½±å“çš„è¡Œæ•°
+     * @param conn      Êı¾İ¿âÁ¬½Ó
+     * @param closeConn ÊÇ·ñ¹Ø±ÕÊı¾İ¿âÁ¬½Ó£¬ÊäÈë true Öµ¹Ø±ÕÊı¾İ¿âÁ¬½Ó£¬false Ôò²»¹Ø±Õ
+     * @param sql       sql¸üĞÂÓï¾ä
+     * @param params    ·ÃÎÊ²ÎÊı
+     * @return ±»Ó°ÏìµÄĞĞÊı
      */
     protected int update(final Connection conn, final boolean closeConn, final String sql, final Object... params) {
         try {
-            //æ•è·å¼‚å¸¸
+            //²¶»ñÒì³£
             return this.update0(conn, closeConn, sql, params);
         } catch (SQLException e) {
-            //æŠ›å‡ºæ›´æ–°å¤±è´¥å¼‚å¸¸
+            //Å×³ö¸üĞÂÊ§°ÜÒì³£
             throw new DaoException("update defeated...", e);
         }
     }
 
     /**
-     * å¯¹æ•°æ®åº“è¿›è¡Œæ›´æ–°æ“ä½œï¼Œå¹¶è¿”å›ä¸€ä¸ªè¢«ä¿®æ”¹çš„è¡Œæ•°
+     * ¶ÔÊı¾İ¿â½øĞĞ¸üĞÂ²Ù×÷£¬²¢·µ»ØÒ»¸ö±»ĞŞ¸ÄµÄĞĞÊı
      *
-     * @param conn      æ•°æ®åº“è¿æ¥
-     * @param closeConn æ˜¯å¦å…³é—­æ•°æ®åº“è¿æ¥ï¼Œè¾“å…¥ true å€¼å…³é—­æ•°æ®åº“è¿æ¥ï¼Œfalse åˆ™ä¸å…³é—­
-     * @param sql       sqlæ›´æ–°è¯­å¥
-     * @param params    è®¿é—®å‚æ•°
-     * @return è¢«å½±å“çš„è¡Œæ•°
+     * @param conn      Êı¾İ¿âÁ¬½Ó
+     * @param closeConn ÊÇ·ñ¹Ø±ÕÊı¾İ¿âÁ¬½Ó£¬ÊäÈë true Öµ¹Ø±ÕÊı¾İ¿âÁ¬½Ó£¬false Ôò²»¹Ø±Õ
+     * @param sql       sql¸üĞÂÓï¾ä
+     * @param params    ·ÃÎÊ²ÎÊı
+     * @return ±»Ó°ÏìµÄĞĞÊı
      */
     protected int update0(final Connection conn, final boolean closeConn, final String sql, final Object... params) throws SQLException {
-        //æ£€æŸ¥æ•°æ®åº“è¿æ¥æ˜¯å¦ä¸ºç©º
+        //¼ì²éÊı¾İ¿âÁ¬½ÓÊÇ·ñÎª¿Õ
         checkConnection(conn);
-        //æ£€æŸ¥sqlè¯­å¥æ˜¯å¦ä¸ºç©º
+        //¼ì²ésqlÓï¾äÊÇ·ñÎª¿Õ
         checkSql(conn, closeConn, sql);
 
-        //å£°æ˜PreparedStatementå¯¹è±¡ statement ä¸ºç©º
+        //ÉùÃ÷PreparedStatement¶ÔÏó statement Îª¿Õ
         PreparedStatement statement = null;
-        //å£°æ˜è¢«ä¿®æ”¹çš„è¡Œæ•° rows
+        //ÉùÃ÷±»ĞŞ¸ÄµÄĞĞÊı rows
         int rows = 0;
         try {
-            //ä»æ•°æ®åº“è¿æ¥ä¸­è·å– PreparedStatement å¯¹è±¡ å¹¶èµ‹å€¼ç»™ statement
+            //´ÓÊı¾İ¿âÁ¬½ÓÖĞ»ñÈ¡ PreparedStatement ¶ÔÏó ²¢¸³Öµ¸ø statement
             statement = conn.prepareStatement(sql);
-            //ç»™æ‰§è¡Œå™¨ statement å¡«å…¥å‚æ•°
+            //¸øÖ´ĞĞÆ÷ statement ÌîÈë²ÎÊı
             statement = this.fillStatement(statement, params);
-            //ä½¿ç”¨statementæ‰§è¡Œå™¨çš„.executeUpdate() æ›´æ–°æ–¹æ³•ï¼Œå¹¶å°†è¿”å›å€¼ èµ‹å€¼ç»™ rows
+            //Ê¹ÓÃstatementÖ´ĞĞÆ÷µÄ.executeUpdate() ¸üĞÂ·½·¨£¬²¢½«·µ»ØÖµ ¸³Öµ¸ø rows
             rows = statement.executeUpdate();
         } catch (SQLException e) {
-            //æŠ›å‡ºæ›´æ–°å¤±è´¥å¼‚å¸¸
+            //Å×³ö¸üĞÂÊ§°ÜÒì³£
             throw new DaoException("update defeated...", e);
         } finally {
-            //å…³é—­æ‰§è¡Œå™¨ statement
+            //¹Ø±ÕÖ´ĞĞÆ÷ statement
             close(statement);
-            //åˆ¤æ–­æ˜¯å¦éœ€è¦å…³é—­è¿æ¥
+            //ÅĞ¶ÏÊÇ·ñĞèÒª¹Ø±ÕÁ¬½Ó
             if (closeConn) {
-                //ä¸ºçœŸå…³é—­è¿æ¥
+                //ÎªÕæ¹Ø±ÕÁ¬½Ó
                 close(conn);
             }
         }
-        //è¿”å›è¢«ä¿®æ”¹çš„è¡Œæ•° rows
+        //·µ»Ø±»ĞŞ¸ÄµÄĞĞÊı rows
         return rows;
     }
 
     /**
-     * å¯¹æ•°æ®æ‰§è¡ŒæŸ¥è¯¢æ“ä½œï¼Œè¿”å›ä¸€ä¸ª ç”¨æˆ·å®šä¹‰çš„å¯¹è±¡
+     * ¶ÔÊı¾İÖ´ĞĞ²éÑ¯²Ù×÷£¬·µ»ØÒ»¸ö ÓÃ»§¶¨ÒåµÄ¶ÔÏó
      *
-     * @param sql    sqlæŸ¥è¯¢è¯­å¥
-     * @param params è®¿é—®å‚æ•°
-     * @return ä¸€ä¸ªå¯¹è±¡
+     * @param sql    sql²éÑ¯Óï¾ä
+     * @param params ·ÃÎÊ²ÎÊı
+     * @return Ò»¸ö¶ÔÏó
      */
     public <T> T query(final String sql, final ResultSetHandler<T> rsh, final Object... params) {
-        //è°ƒç”¨ prepareConnection è·å–æ•°æ®åº“è¿æ¥å¯¹è±¡
+        //µ÷ÓÃ prepareConnection »ñÈ¡Êı¾İ¿âÁ¬½Ó¶ÔÏó
         Connection conn = this.prepareConnection();
-        //è°ƒç”¨è‡ªèº«çš„ query æ–¹æ³•
+        //µ÷ÓÃ×ÔÉíµÄ query ·½·¨
         return this.query(conn, true, sql, rsh, params);
     }
 
     /**
-     * å¯¹æ•°æ®æ‰§è¡ŒæŸ¥è¯¢æ“ä½œï¼Œè¿”å›ä¸€ä¸ª ç”¨æˆ·å®šä¹‰çš„å¯¹è±¡
+     * ¶ÔÊı¾İÖ´ĞĞ²éÑ¯²Ù×÷£¬·µ»ØÒ»¸ö ÓÃ»§¶¨ÒåµÄ¶ÔÏó
      *
-     * @param sql    sqlæŸ¥è¯¢è¯­å¥
-     * @param params è®¿é—®å‚æ•°
-     * @return ä¸€ä¸ªå¯¹è±¡
+     * @param sql    sql²éÑ¯Óï¾ä
+     * @param params ·ÃÎÊ²ÎÊı
+     * @return Ò»¸ö¶ÔÏó
      */
     public <T> T query(final Connection conn, final String sql, final ResultSetHandler<T> rsh, final Object... params) {
-        //è°ƒç”¨è‡ªèº«çš„ query æ–¹æ³•
+        //µ÷ÓÃ×ÔÉíµÄ query ·½·¨
         return this.query(conn, false, sql, rsh, params);
     }
 
     /**
-     * å¯¹æ•°æ®æ‰§è¡ŒæŸ¥è¯¢æ“ä½œï¼Œè¿”å›ä¸€ä¸ª ç”¨æˆ·å®šä¹‰çš„å¯¹è±¡
+     * ¶ÔÊı¾İÖ´ĞĞ²éÑ¯²Ù×÷£¬·µ»ØÒ»¸ö ÓÃ»§¶¨ÒåµÄ¶ÔÏó
      *
-     * @param conn      æ•°æ®åº“è¿æ¥
-     * @param closeConn æ˜¯å¦å…³é—­æ•°æ®åº“è¿æ¥ï¼Œè¾“å…¥ true å€¼å…³é—­æ•°æ®åº“è¿æ¥ï¼Œfalse åˆ™ä¸å…³é—­
-     * @param sql       sqlæŸ¥è¯¢è¯­å¥
-     * @param params    è®¿é—®å‚æ•°
-     * @return ä¸€ä¸ªå¯¹è±¡
+     * @param conn      Êı¾İ¿âÁ¬½Ó
+     * @param closeConn ÊÇ·ñ¹Ø±ÕÊı¾İ¿âÁ¬½Ó£¬ÊäÈë true Öµ¹Ø±ÕÊı¾İ¿âÁ¬½Ó£¬false Ôò²»¹Ø±Õ
+     * @param sql       sql²éÑ¯Óï¾ä
+     * @param params    ·ÃÎÊ²ÎÊı
+     * @return Ò»¸ö¶ÔÏó
      */
     protected <T> T query(final Connection conn, final boolean closeConn, final String sql, final ResultSetHandler<T> rsh, final Object... params) {
         try {
-            //æ•è·å¼‚å¸¸
+            //²¶»ñÒì³£
             return this.query0(conn, closeConn, sql, rsh, params);
         } catch (SQLException e) {
-            //æŠ›å‡ºæŸ¥è¯¢å¤±è´¥å¼‚å¸¸
+            //Å×³ö²éÑ¯Ê§°ÜÒì³£
             throw new DaoException("query defeated...", e);
         }
     }
 
     /**
-     * å¯¹æ•°æ®æ‰§è¡ŒæŸ¥è¯¢æ“ä½œï¼Œè¿”å›ä¸€ä¸ª ç”¨æˆ·å®šä¹‰çš„å¯¹è±¡
+     * ¶ÔÊı¾İÖ´ĞĞ²éÑ¯²Ù×÷£¬·µ»ØÒ»¸ö ÓÃ»§¶¨ÒåµÄ¶ÔÏó
      *
-     * @param conn      æ•°æ®åº“è¿æ¥
-     * @param closeConn æ˜¯å¦å…³é—­æ•°æ®åº“è¿æ¥ï¼Œè¾“å…¥ true å€¼å…³é—­æ•°æ®åº“è¿æ¥ï¼Œfalse åˆ™ä¸å…³é—­
-     * @param sql       sqlæŸ¥è¯¢è¯­å¥
-     * @param params    è®¿é—®å‚æ•°
-     * @return ä¸€ä¸ªå¯¹è±¡
+     * @param conn      Êı¾İ¿âÁ¬½Ó
+     * @param closeConn ÊÇ·ñ¹Ø±ÕÊı¾İ¿âÁ¬½Ó£¬ÊäÈë true Öµ¹Ø±ÕÊı¾İ¿âÁ¬½Ó£¬false Ôò²»¹Ø±Õ
+     * @param sql       sql²éÑ¯Óï¾ä
+     * @param params    ·ÃÎÊ²ÎÊı
+     * @return Ò»¸ö¶ÔÏó
      */
     protected <T> T query0(final Connection conn, final boolean closeConn, final String sql, final ResultSetHandler<T> rsh, final Object... params) throws SQLException {
-        //æ£€æŸ¥æ•°æ®åº“è¿æ¥æ˜¯å¦ä¸ºç©º
+        //¼ì²éÊı¾İ¿âÁ¬½ÓÊÇ·ñÎª¿Õ
         checkConnection(conn);
-        //æ£€æŸ¥sqlè¯­å¥æ˜¯å¦ä¸ºç©º
+        //¼ì²ésqlÓï¾äÊÇ·ñÎª¿Õ
         checkSql(conn, closeConn, sql);
-        //æ£€æŸ¥ResultSetHandlerå¯¹è±¡æ˜¯å¦ä¸ºç©º
+        //¼ì²éResultSetHandler¶ÔÏóÊÇ·ñÎª¿Õ
         checkResultSetHandler(conn, closeConn, rsh);
 
-        //å£°æ˜PreparedStatementå¯¹è±¡ statement ä¸ºç©º
+        //ÉùÃ÷PreparedStatement¶ÔÏó statement Îª¿Õ
         PreparedStatement statement = null;
-        //å£°æ˜è¿”å›ç»“æœé›†ä¸ºç©º
+        //ÉùÃ÷·µ»Ø½á¹û¼¯Îª¿Õ
         ResultSet rs = null;
-        //å£°æ˜è¿”å›çš„å¯¹è±¡ä¸ºç©º
+        //ÉùÃ÷·µ»ØµÄ¶ÔÏóÎª¿Õ
         T result = null;
         try {
-            //ä»æ•°æ®åº“è¿æ¥ä¸­è·å– PreparedStatement å¯¹è±¡ å¹¶èµ‹å€¼ç»™ statement
+            //´ÓÊı¾İ¿âÁ¬½ÓÖĞ»ñÈ¡ PreparedStatement ¶ÔÏó ²¢¸³Öµ¸ø statement
             statement = conn.prepareStatement(sql);
-            //ç»™æ‰§è¡Œå™¨ statement å¡«å…¥å‚æ•°
+            //¸øÖ´ĞĞÆ÷ statement ÌîÈë²ÎÊı
             statement = this.fillStatement(statement, params);
-            //ä½¿ç”¨statementæ‰§è¡Œå™¨çš„.executeQuery() æŸ¥è¯¢æ–¹æ³•ï¼Œå¾—åˆ°æŸ¥è¯¢ç»“æœé›†
+            //Ê¹ÓÃstatementÖ´ĞĞÆ÷µÄ.executeQuery() ²éÑ¯·½·¨£¬µÃµ½²éÑ¯½á¹û¼¯
             rs = statement.executeQuery();
-            //ä½¿ç”¨ ResultSetHandler å¯¹è±¡çš„ handler æ–¹æ³•ï¼Œå¾—åˆ°ä¸€ä¸ªè¿”å›å¯¹è±¡
+            //Ê¹ÓÃ ResultSetHandler ¶ÔÏóµÄ handler ·½·¨£¬µÃµ½Ò»¸ö·µ»Ø¶ÔÏó
             result = rsh.handler(rs);
         } catch (SQLException e) {
-            //æŠ›å‡ºæŸ¥è¯¢å¤±è´¥å¼‚å¸¸
+            //Å×³ö²éÑ¯Ê§°ÜÒì³£
             throw new DaoException("query defeated...", e);
         } finally {
-            //å…³é—­ç»“æœé›†
+            //¹Ø±Õ½á¹û¼¯
             close(rs);
-            //å…³é—­æ‰§è¡Œå™¨ statement
+            //¹Ø±ÕÖ´ĞĞÆ÷ statement
             close(statement);
-            //åˆ¤æ–­æ˜¯å¦éœ€è¦å…³é—­è¿æ¥
+            //ÅĞ¶ÏÊÇ·ñĞèÒª¹Ø±ÕÁ¬½Ó
             if (closeConn) {
-                //ä¸ºçœŸå…³é—­è¿æ¥
+                //ÎªÕæ¹Ø±ÕÁ¬½Ó
                 close(conn);
             }
 
         }
-        //è¿”å›å¯¹è±¡ result
+        //·µ»Ø¶ÔÏó result
         return result;
     }
 
     /**
-     * ç»™æ•°æ®åº“å¢åŠ ä¸€è¡Œæ•°æ®åï¼Œè¿”å›ä¸€ä¸ªè‡ªå¢é•¿çš„å€¼
-     * @param sql       sqlæŸ¥è¯¢è¯­å¥
-     * @param params    è®¿é—®å‚æ•°
-     * @return è‡ªå¢é•¿çš„å€¼
+     * ¸øÊı¾İ¿âÔö¼ÓÒ»ĞĞÊı¾İºó£¬·µ»ØÒ»¸ö×ÔÔö³¤µÄÖµ
+     * @param sql       sql²éÑ¯Óï¾ä
+     * @param params    ·ÃÎÊ²ÎÊı
+     * @return ×ÔÔö³¤µÄÖµ
      */
     public <T> T insert(final String sql, final ResultSetHandler<T> rsh, final Object... params){
-        //è°ƒç”¨è‡ªèº« insert æ–¹æ³•
+        //µ÷ÓÃ×ÔÉí insert ·½·¨
         return this.insert(this.prepareConnection(),true,sql,rsh,params);
     }
 
     /**
-     * ç»™æ•°æ®åº“å¢åŠ ä¸€è¡Œæ•°æ®åï¼Œè¿”å›ä¸€ä¸ªè‡ªå¢é•¿çš„å€¼
-     * @param conn      æ•°æ®åº“è¿æ¥
-     * @param sql       sqlæŸ¥è¯¢è¯­å¥
-     * @param params    è®¿é—®å‚æ•°
-     * @return è‡ªå¢é•¿çš„å€¼
+     * ¸øÊı¾İ¿âÔö¼ÓÒ»ĞĞÊı¾İºó£¬·µ»ØÒ»¸ö×ÔÔö³¤µÄÖµ
+     * @param conn      Êı¾İ¿âÁ¬½Ó
+     * @param sql       sql²éÑ¯Óï¾ä
+     * @param params    ·ÃÎÊ²ÎÊı
+     * @return ×ÔÔö³¤µÄÖµ
      */
     public <T> T insert(final Connection conn, final String sql, final ResultSetHandler<T> rsh, final Object... params){
-        //è°ƒç”¨è‡ªèº« insert æ–¹æ³•
+        //µ÷ÓÃ×ÔÉí insert ·½·¨
         return this.insert(conn,false,sql,rsh,params);
     }
 
     /**
-     * ç»™æ•°æ®åº“å¢åŠ ä¸€è¡Œæ•°æ®åï¼Œè¿”å›ä¸€ä¸ªè‡ªå¢é•¿çš„å€¼
-     * @param conn      æ•°æ®åº“è¿æ¥
-     * @param closeConn æ˜¯å¦å…³é—­æ•°æ®åº“è¿æ¥ï¼Œè¾“å…¥ true å€¼å…³é—­æ•°æ®åº“è¿æ¥ï¼Œfalse åˆ™ä¸å…³é—­
-     * @param sql       sqlæŸ¥è¯¢è¯­å¥
-     * @param params    è®¿é—®å‚æ•°
-     * @return è‡ªå¢é•¿çš„å€¼
+     * ¸øÊı¾İ¿âÔö¼ÓÒ»ĞĞÊı¾İºó£¬·µ»ØÒ»¸ö×ÔÔö³¤µÄÖµ
+     * @param conn      Êı¾İ¿âÁ¬½Ó
+     * @param closeConn ÊÇ·ñ¹Ø±ÕÊı¾İ¿âÁ¬½Ó£¬ÊäÈë true Öµ¹Ø±ÕÊı¾İ¿âÁ¬½Ó£¬false Ôò²»¹Ø±Õ
+     * @param sql       sql²éÑ¯Óï¾ä
+     * @param params    ·ÃÎÊ²ÎÊı
+     * @return ×ÔÔö³¤µÄÖµ
      */
     protected <T> T insert(final Connection conn, final boolean closeConn, final String sql, final ResultSetHandler<T> rsh, final Object... params){
         try {
-            //è°ƒç”¨è‡ªèº« insert0 æ–¹æ³•
+            //µ÷ÓÃ×ÔÉí insert0 ·½·¨
             return this.insert0(conn,closeConn,sql,rsh,params);
         } catch (SQLException e) {
             throw new DaoException("insert defeated...", e);
@@ -250,54 +250,54 @@ public class SqlExecutor extends AbstractSqlExecutor {
     }
 
     /**
-     * ç»™æ•°æ®åº“å¢åŠ ä¸€è¡Œæ•°æ®åï¼Œè¿”å›ä¸€ä¸ªè‡ªå¢é•¿çš„å€¼
-     * @param conn      æ•°æ®åº“è¿æ¥
-     * @param closeConn æ˜¯å¦å…³é—­æ•°æ®åº“è¿æ¥ï¼Œè¾“å…¥ true å€¼å…³é—­æ•°æ®åº“è¿æ¥ï¼Œfalse åˆ™ä¸å…³é—­
-     * @param sql       sqlæŸ¥è¯¢è¯­å¥
-     * @param params    è®¿é—®å‚æ•°
-     * @return è‡ªå¢é•¿çš„å€¼
+     * ¸øÊı¾İ¿âÔö¼ÓÒ»ĞĞÊı¾İºó£¬·µ»ØÒ»¸ö×ÔÔö³¤µÄÖµ
+     * @param conn      Êı¾İ¿âÁ¬½Ó
+     * @param closeConn ÊÇ·ñ¹Ø±ÕÊı¾İ¿âÁ¬½Ó£¬ÊäÈë true Öµ¹Ø±ÕÊı¾İ¿âÁ¬½Ó£¬false Ôò²»¹Ø±Õ
+     * @param sql       sql²éÑ¯Óï¾ä
+     * @param params    ·ÃÎÊ²ÎÊı
+     * @return ×ÔÔö³¤µÄÖµ
      */
     protected <T> T insert0(final Connection conn, final boolean closeConn, final String sql, final ResultSetHandler<T> rsh, final Object... params) throws SQLException {
-        //æ£€æŸ¥æ•°æ®åº“è¿æ¥æ˜¯å¦ä¸ºç©º
+        //¼ì²éÊı¾İ¿âÁ¬½ÓÊÇ·ñÎª¿Õ
         checkConnection(conn);
-        //æ£€æŸ¥sqlè¯­å¥æ˜¯å¦ä¸ºç©º
+        //¼ì²ésqlÓï¾äÊÇ·ñÎª¿Õ
         checkSql(conn, closeConn, sql);
-        //æ£€æŸ¥ResultSetHandlerå¯¹è±¡æ˜¯å¦ä¸ºç©º
+        //¼ì²éResultSetHandler¶ÔÏóÊÇ·ñÎª¿Õ
         checkResultSetHandler(conn, closeConn, rsh);
 
-        //å£°æ˜PreparedStatementå¯¹è±¡ statement ä¸ºç©º
+        //ÉùÃ÷PreparedStatement¶ÔÏó statement Îª¿Õ
         PreparedStatement statement = null;
-        //å£°æ˜è¿”å›ç»“æœé›†ä¸ºç©º
+        //ÉùÃ÷·µ»Ø½á¹û¼¯Îª¿Õ
         ResultSet rs = null;
-        //å£°æ˜è¿”å›çš„å¯¹è±¡ä¸ºç©º
+        //ÉùÃ÷·µ»ØµÄ¶ÔÏóÎª¿Õ
         T result = null;
         try {
-            //ä»æ•°æ®åº“è¿æ¥ä¸­è·å– PreparedStatement å¯¹è±¡ å¹¶èµ‹å€¼ç»™ statement
+            //´ÓÊı¾İ¿âÁ¬½ÓÖĞ»ñÈ¡ PreparedStatement ¶ÔÏó ²¢¸³Öµ¸ø statement
             statement = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
-            //ç»™æ‰§è¡Œå™¨ statement å¡«å…¥å‚æ•°
+            //¸øÖ´ĞĞÆ÷ statement ÌîÈë²ÎÊı
             statement = this.fillStatement(statement, params);
-            //å¯¹æ•°æ®åº“è¿›è¡Œæ›´æ–°æ“ä½œ
+            //¶ÔÊı¾İ¿â½øĞĞ¸üĞÂ²Ù×÷
             statement.executeUpdate();
-            //ä½¿ç”¨statementæ‰§è¡Œå™¨çš„.getGeneratedKeys() æŸ¥è¯¢æ–¹æ³•ï¼Œå¾—åˆ°è‡ªå¢é•¿çš„ç»“æœé›†
+            //Ê¹ÓÃstatementÖ´ĞĞÆ÷µÄ.getGeneratedKeys() ²éÑ¯·½·¨£¬µÃµ½×ÔÔö³¤µÄ½á¹û¼¯
             rs = statement.getGeneratedKeys();
-            //ä½¿ç”¨ ResultSetHandler å¯¹è±¡çš„ handler æ–¹æ³•ï¼Œå¾—åˆ°ä¸€ä¸ªè¿”å›å¯¹è±¡
+            //Ê¹ÓÃ ResultSetHandler ¶ÔÏóµÄ handler ·½·¨£¬µÃµ½Ò»¸ö·µ»Ø¶ÔÏó
             result = rsh.handler(rs);
         } catch (SQLException e) {
-            //æŠ›å‡ºæ’å…¥æ•°æ®å¤±è´¥å¼‚å¸¸
+            //Å×³ö²åÈëÊı¾İÊ§°ÜÒì³£
             throw new DaoException("insert defeated...", e);
         } finally {
-            //å…³é—­ç»“æœé›†
+            //¹Ø±Õ½á¹û¼¯
             close(rs);
-            //å…³é—­æ‰§è¡Œå™¨ statement
+            //¹Ø±ÕÖ´ĞĞÆ÷ statement
             close(statement);
-            //åˆ¤æ–­æ˜¯å¦éœ€è¦å…³é—­è¿æ¥
+            //ÅĞ¶ÏÊÇ·ñĞèÒª¹Ø±ÕÁ¬½Ó
             if (closeConn) {
-                //ä¸ºçœŸå…³é—­è¿æ¥
+                //ÎªÕæ¹Ø±ÕÁ¬½Ó
                 close(conn);
             }
 
         }
-        //è¿”å›å¯¹è±¡ result
+        //·µ»Ø¶ÔÏó result
         return result;
     }
 
