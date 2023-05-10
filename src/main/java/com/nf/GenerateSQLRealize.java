@@ -38,7 +38,7 @@ public class GenerateSQLRealize implements GenerateSQL{
         //获取对象属性
         PropertyDescriptor[] pds = JavaBeanUtils.getPropertyDescriptors(t.getClass());
         //循环属性
-        for (int i = 1; i < pds.length; i++) {
+        for (int i = 0; i < pds.length; i++) {
             //获取字信息
             Field field = JavaBeanUtils.getDeclaredField(clz,pds[i].getName());
             //判断获取的字段是否为空
@@ -60,7 +60,7 @@ public class GenerateSQLRealize implements GenerateSQL{
                 sql.append( ") values(");
             }
         }
-        for (int i = 1; i < pds.length; i++) {
+        for (int i = 0; i < pds.length; i++) {
             //获取字段
             Field field = JavaBeanUtils.getDeclaredField(clz,pds[i].getName());
             //判断获取的字段是否为空
